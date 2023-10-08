@@ -1,0 +1,14 @@
+C:\University\Vovk\Application\DAL\bin\Debug\net6.0\DAL.deps.json
+C:\University\Vovk\Application\DAL\bin\Debug\net6.0\DAL.dll
+C:\University\Vovk\Application\DAL\bin\Debug\net6.0\DAL.pdb
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.csproj.AssemblyReference.cache
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.AssemblyInfoInputs.cache
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.AssemblyInfo.cs
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.csproj.CoreCompileInputs.cache
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.dll
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\refint\DAL.dll
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.pdb
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\ref\DAL.dll
+C:\University\Vovk\Application\DAL\bin\Debug\net6.0\DAL.runtimeconfig.json
+C:\University\Vovk\Application\DAL\obj\Debug\net6.0\DAL.genruntimeconfig.cache
