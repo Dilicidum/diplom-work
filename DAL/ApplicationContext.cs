@@ -2,14 +2,19 @@
 {
     using DAL.Models;
     using Microsoft.EntityFrameworkCore;    
-    public class ApplicationContext: DbContext
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+    public class ApplicationContext: IdentityDbContext<IdentityUser,IdentityRole,string>
     {
-        public DbSet<User> Users { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) { 
-            modelBuilder.Entity<User>().HasKey(x => x.Id);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole() { Name = "User"},
+                new IdentityRole() { Name = "Admin" });
         }
     }
 }
