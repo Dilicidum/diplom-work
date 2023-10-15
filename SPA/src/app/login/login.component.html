@@ -1,0 +1,22 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container-fluid h-100 d-flex justify-content-center align-items-center flex-column">
+  <div class="form">
+    <div class="p-2 form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" class="form-control" formControlName="email" placeholder="Enter email or user name">
+      <small class="form-text text-muted">We will never share your email with anyone else</small>
+    </div>
+
+    <div class="p-2 form-group">
+      <label for="pass">Password</label>
+      <input type="password" id="pass" formControlName="password" class="form-control" placeholder="Fill your password">
+    </div>
+
+    <div class="p-2 form-group">
+      <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary text-dark">Login</button>
+    </div>
+
+    <div class="p-2 form-group">
+      <button routerLink="/register" class="btn btn-primary text-dark">Go to registration form</button>
+    </div>
+  </div>
+</form>

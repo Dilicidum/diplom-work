@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+.btn-primary{
+  background-color: pink !important;
+  border-color: pink !important;
+}
+
+.btn-primary:hover{
+  background-color: 	#ffe9e9 !important;
+}
+
+.time {
+  display: none !important;
+}
+
+
+.border-btm :active {
+  border-bottom: 4px solid #fff0f0;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
