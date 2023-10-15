@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -19,6 +20,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IJWTManager,JWTManager>();
 
+
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:5292", "http://localhost:4200")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+        })
+    );
+
 builder.Services.AddDbContext<ApplicationContext>(options => 
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
@@ -29,6 +41,7 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("EditUsers", policy =>
     policy.RequireRole("Admin"));
 });
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -53,6 +66,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

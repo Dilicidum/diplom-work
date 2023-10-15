@@ -72,9 +72,9 @@ namespace API.Controllers
                 return BadRequest("Login failed");
             }
 
-            var token = await _jwtManager.GenerateToken(user);
+            var token = await _jwtManager.GenerateToken(signedUser);
 
-            return Ok($"token = {token}");
+            return Ok(new { token = token});
         }
 
     }
