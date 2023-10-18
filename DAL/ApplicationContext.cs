@@ -7,14 +7,21 @@
 
     public class ApplicationContext: IdentityDbContext<IdentityUser,IdentityRole,string>
     {
+        public DbSet<Tasks> Tasks { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) { 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole() { Name = "User"},
-                new IdentityRole() { Name = "Admin" });
+            modelBuilder.Entity<Tasks>()
+            .HasMany(t => t.SubTasks)
+            .WithOne()
+            .HasForeignKey(t => t.BaseTaskId);
+
+             modelBuilder.Entity<Tasks>()
+            .HasOne(p => p.User)
+            .WithOne()
+            .HasForeignKey<Tasks>(p => p.UserId); 
         }
     }
 }

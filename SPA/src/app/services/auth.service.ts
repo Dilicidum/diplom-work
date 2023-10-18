@@ -4,18 +4,20 @@ import { UserLoginModel } from '../models/userLoginModel';
 import { tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { UserRegistrationModel } from '../models/userRegistrationModel';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   loginUrl: string = 'http://localhost:5292/Authentication/Login';
   registrationUrl: string = 'http://localhost:5292/Authentication/Register';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   login(data: UserLoginModel) {
     return this.http.post(this.loginUrl, data).pipe(
       tap((res: any) => {
         localStorage.setItem('token', res.token);
+        console.log('is token expired = ', this.jwtHelper.isTokenExpired());
         this.isLoggedIn$.next(true);
       })
     );
@@ -31,7 +33,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') && !this.jwtHelper.isTokenExpired()) {
       return true;
     } else {
       return false;
@@ -41,4 +43,6 @@ export class AuthService {
   isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     this.isAuthenticated()
   );
+
+  token: string = localStorage.getItem('token') || '';
 }

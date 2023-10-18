@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -10,9 +10,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TasksComponent } from './tasks/tasks.component';
 import { AuthGuard } from './helpers/AuthGuard';
 import { AppMenuComponent } from './app-menu/app-menu.component';
+import { TaskCardComponent } from './task-card/task-card.component';
+import { JWTTokenInterceptor } from './helpers/JWTTokenInterceptor';
 
 export function tokenGetter() {
-  return localStorage.getItem('access_token');
+  return localStorage.getItem('token');
 }
 
 const routes: Routes = [
@@ -34,6 +36,7 @@ const routes: Routes = [
     RegisterComponent,
     TasksComponent,
     AppMenuComponent,
+    TaskCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,13 @@ const routes: Routes = [
       },
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JWTTokenInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -65,6 +65,12 @@ namespace API.Controllers
             var user = _mapper.Map<IdentityUser>(model);
 
             var signedUser = await _userManager.FindByEmailAsync(model.Email);
+
+            if(signedUser == null)
+            {
+                return BadRequest("Wrong credentials");
+            }
+
             var res = await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, true, false);
 
             if(!res.Succeeded) 

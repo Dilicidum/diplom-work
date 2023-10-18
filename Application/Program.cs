@@ -1,7 +1,12 @@
 
 using API.Interfaces;
 using API.Security;
+using BLL.Interfaces;
+using BLL.Services;
 using DAL;
+using DAL.Interfaces;
+using DAL.Models;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +24,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IJWTManager,JWTManager>();
-
+builder.Services.AddScoped<ITasksService,TasksService>();
+builder.Services.AddScoped<IGenericRepository<Tasks>,GenericRepository<Tasks>>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(

@@ -30,6 +30,7 @@ namespace API.Security
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>(){ 
+                new Claim(ClaimTypes.NameIdentifier,user.Id),
                 new Claim(ClaimTypes.Name, user.UserName)
             };
 
