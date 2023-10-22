@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TasksService } from '../services/tasks.service';
 import { OnInit } from '@angular/core';
-import { TaskStatus, TaskStatusSort, Tasks } from '../models/tasks';
+import { TaskStatus, TaskStatusSort, TaskType, Tasks } from '../models/tasks';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-tasks',
@@ -15,20 +15,24 @@ export class TasksComponent implements OnInit {
   TaskStatus = TaskStatusSort;
   taskStatuses: string[];
   Tasks: Tasks[] = [];
+  taskType = TaskType.task;
 
   tasks$: Observable<Tasks[]>;
   ngOnInit(): void {
     this.StatusSort = TaskStatusSort.All;
     this.taskStatuses = Object.keys(this.TaskStatus);
-    this.tasks$ = this.taskService.getTasks();
+
+    this.taskType = TaskType.task;
+    console.log(this.taskType);
+    this.tasks$ = this.taskService.getTasks('', this.taskType);
   }
 
   StatusSortChange(value: any) {
     this.StatusSort = value;
     if (this.StatusSort != TaskStatusSort.All) {
-      this.tasks$ = this.taskService.getTasksFiltered(this.StatusSort);
+      this.tasks$ = this.taskService.getTasks(this.StatusSort, this.taskType);
     } else {
-      this.tasks$ = this.taskService.getTasks();
+      this.tasks$ = this.taskService.getTasks('', this.taskType);
     }
   }
 

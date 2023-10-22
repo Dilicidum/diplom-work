@@ -13,6 +13,7 @@ import { AppMenuComponent } from './app-menu/app-menu.component';
 import { TaskCardComponent } from './task-card/task-card.component';
 import { JWTTokenInterceptor } from './helpers/JWTTokenInterceptor';
 import { CreateTaskFormComponent } from './create-task-form/create-task-form.component';
+import { TaskInfoComponent } from './task-info/task-info.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -32,7 +33,11 @@ const routes: Routes = [
     component: CreateTaskFormComponent,
     canActivate: [AuthGuard],
   },
-  { path: '**', redirectTo: '/login' },
+  {
+    path: 'tasks/:id',
+    component: TaskInfoComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
@@ -44,6 +49,7 @@ const routes: Routes = [
     AppMenuComponent,
     TaskCardComponent,
     CreateTaskFormComponent,
+    TaskInfoComponent,
   ],
   imports: [
     BrowserModule,

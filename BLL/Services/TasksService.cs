@@ -61,5 +61,26 @@ namespace BLL.Services
 
             return tasks;
         }
+
+        public async Task<bool> ValidateTaskExistence(int? taskId,DAL.Models.TaskType? type = null)
+        {
+
+            if (!type.HasValue)
+            {
+                var task = (await _unitOfWork.TasksRepository.Get(x=>x.Id == taskId)).FirstOrDefault();
+                if(task != null)
+                {
+                    return true;
+                }
+            }
+
+            var res = (await _unitOfWork.TasksRepository.Get(x=>x.Id == taskId && x.TaskType == type)).FirstOrDefault();
+            if (res != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

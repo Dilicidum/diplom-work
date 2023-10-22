@@ -19,9 +19,17 @@
           <option  *ngFor="let key of taskCategories" [value]="TaskCategory[key]">{{TaskCategory[key]}}</option>
         </select>
       </div>
+
     </div>
 
     <div>
+      <div class="p-2 form-group">
+        <label for="type">Task type</label>
+        <select id="type" class="form-control" [disabled]="true">
+          <option >{{task.taskType}}</option>
+        </select>
+      </div>
+
       <div class="p-2 form-group">
         <label for="Name">Name</label>
         <input type="text" id="Name" class="form-control" formControlName="name" placeholder="Enter task name">
@@ -31,8 +39,6 @@
         <label for="description">Description</label>
         <input type="text" id="description" formControlName="description" class="form-control" placeholder="Enter description">
       </div>
-
-
     </div>
 
     <div class="d-flex flex-row justify-content-between">
@@ -50,6 +56,12 @@
 
       <div class="p-2 form-group">
         <button (click)="Delete()" class="btn btn-primary text-dark">Delete</button>
+      </div>
+    </div>
+
+    <div class="d-flex" *ngIf="isDetailed==false">
+      <div class="p-2 form-group">
+        <button class="btn btn-primary text-dark" [routerLink]="['/tasks',task.id]">More detailed info</button>
       </div>
     </div>
   </div>

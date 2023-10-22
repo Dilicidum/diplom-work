@@ -80,7 +80,7 @@ namespace API.Controllers
 
             var token = await _jwtManager.GenerateToken(signedUser);
 
-            return Ok(new { token = token});
+            return Ok(new { token = token,userId = signedUser.Id});
         }
 
     }

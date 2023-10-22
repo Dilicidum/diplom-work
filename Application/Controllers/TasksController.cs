@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace API.Controllers
 {
@@ -37,38 +38,63 @@ namespace API.Controllers
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if(user == null)
+            if(task.UserId != userId)
             {
                 return BadRequest("Invalid user");
             }
 
-
             var taskToCreate = _mapper.Map<Tasks>(task);
-            taskToCreate.UserId = userId;
 
+            if(task.TaskType == TaskType.SubTask)
+            {
+                var baseTaskExists = await _taskService.ValidateTaskExistence(task.BaseTaskId,TaskType.Task);
+
+                if(baseTaskExists)
+                {
+                    await _taskService.AddTask(taskToCreate);
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+            
             await _taskService.AddTask(taskToCreate);
 
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTasksWithFilter([FromQuery]DAL.Models.TaskStatus? status)
+        public async Task<IActionResult> GetTasksWithFilter([FromQuery]DAL.Models.TaskStatus? status, [FromQuery]TaskType? taskType)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(status == null)
-            {
+            
                 var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
 
-                return Ok(tasks);
-            }
+            
+            Func<Tasks, bool> filter = x => 
+            (!status.HasValue || x.Status == status.Value) && 
+            (!taskType.HasValue || x.TaskType == taskType.Value);
 
-            var filteredTasks = await _taskService.GetTasksForUser(userId,(x=>x.Status == status));
+            var filteredTasks = await _taskService.GetTasksForUser(userId,filter);
 
             return Ok(filteredTasks);
         }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetTaskById(int Id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var task = (await _taskService.GetTasksForUser(userId,x=>x.Id == Id)).SingleOrDefault();
+
+            if(task == null)
+            {
+                return BadRequest("Task not found");
+            }
+
+            return Ok(task);
+        }
+
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id)

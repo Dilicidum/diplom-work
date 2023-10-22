@@ -16,5 +16,7 @@ namespace BLL.Interfaces
         public Task DeleteTask(Tasks task);
 
         public Task UpdateTask(Tasks task);
+
+        public Task<bool> ValidateTaskExistence(int? taskId, TaskType? taskType);
     }
 }

@@ -9,12 +9,10 @@ export class TasksService {
   baseUrl: string = 'http://localhost:5292/Tasks';
   constructor(private http: HttpClient) {}
 
-  getTasks(): Observable<Tasks[]> {
-    return this.http.get<Tasks[]>(this.baseUrl);
-  }
-
-  getTasksFiltered(status: string): Observable<Tasks[]> {
-    return this.http.get<Tasks[]>(this.baseUrl + '/?Status=' + status);
+  getTasks(status: string = '', taskType: string = ''): Observable<Tasks[]> {
+    return this.http.get<Tasks[]>(
+      this.baseUrl + '/?Status=' + status + '&TaskType=' + taskType
+    );
   }
 
   deleteTask(id: number) {
@@ -27,5 +25,9 @@ export class TasksService {
 
   updateTask(task: Tasks): Observable<any> {
     return this.http.put(this.baseUrl + '/' + task.id, task);
+  }
+
+  getTaskById(id: number): Observable<Tasks> {
+    return this.http.get<Tasks>(this.baseUrl + '/' + id);
   }
 }

@@ -19,7 +19,7 @@ export class AuthService {
         console.log('res = ', res);
 
         localStorage.setItem('token', res.token);
-
+        localStorage.setItem('userId', res.userId);
         this.isLoggedIn$.next(true);
       })
     );

@@ -8,6 +8,7 @@ export interface Tasks {
   taskType: TaskType;
   userId: string;
   dueDate: Date;
+  subTasks: Tasks[];
 }
 
 export enum TaskCategory {
