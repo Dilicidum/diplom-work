@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskCategory, TaskStatus, Tasks } from '../models/tasks';
 import { OnChanges } from '@angular/core';
@@ -11,6 +11,7 @@ import { TasksService } from '../services/tasks.service';
 })
 export class TaskCardComponent implements OnChanges {
   @Input() task: Tasks;
+  @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();
 
   taskForm: FormGroup;
   TaskCategory = TaskCategory;
@@ -51,8 +52,8 @@ export class TaskCardComponent implements OnChanges {
     this.taskForm.patchValue({
       name: this.task.name,
       description: this.task.description,
-      category: this.taskCategories[this.task.category],
-      status: this.taskStatuses[this.task.status],
+      category: this.TaskCategory[this.task.category],
+      status: this.TaskStatus[this.task.status],
       dueDate: formattedDate,
     });
   }
@@ -66,9 +67,19 @@ export class TaskCardComponent implements OnChanges {
     this.taskForm.disable();
   }
 
-  onSubmit() {}
+  onSubmit() {
+    this.task.name = this.taskForm.get('name').value;
+    this.task.description = this.taskForm.get('description').value;
+    this.task.category = this.taskForm.get('category').value;
+    this.task.status = this.taskForm.get('status').value;
+    this.task.dueDate = this.taskForm.get('dueDate').value;
+    this.taskService.updateTask(this.task).subscribe((data) => {});
+    this.taskForm.disable();
+  }
 
   Delete() {
-    this.taskService.deleteTask(this.task.id).subscribe();
+    this.taskService.deleteTask(this.task.id).subscribe((data) => {
+      this.deleteEvent.emit();
+    });
   }
 }

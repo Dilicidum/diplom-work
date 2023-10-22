@@ -20,8 +20,8 @@
 
              modelBuilder.Entity<Tasks>()
             .HasOne(p => p.User)
-            .WithOne()
-            .HasForeignKey<Tasks>(p => p.UserId); 
+            .WithMany()
+            .HasForeignKey(p => p.UserId); 
         }
     }
 }

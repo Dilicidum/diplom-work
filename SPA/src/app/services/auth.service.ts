@@ -16,8 +16,10 @@ export class AuthService {
   login(data: UserLoginModel) {
     return this.http.post(this.loginUrl, data).pipe(
       tap((res: any) => {
+        console.log('res = ', res);
+
         localStorage.setItem('token', res.token);
-        console.log('is token expired = ', this.jwtHelper.isTokenExpired());
+
         this.isLoggedIn$.next(true);
       })
     );
@@ -29,6 +31,7 @@ export class AuthService {
 
   logout() {
     this.isLoggedIn$.next(false);
+    console.log('remove token');
     localStorage.removeItem('token');
   }
 

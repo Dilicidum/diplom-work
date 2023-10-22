@@ -1,0 +1,6 @@
+.container{
+  display: flex; /* Establishes the main container as a flex container */
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically, if you want it centered vertically as well */
+  background-color: pink;
+}

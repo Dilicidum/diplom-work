@@ -11,8 +11,10 @@ namespace BLL.Interfaces
     {
         public Task AddTask(Tasks task);
 
-        public Task<IEnumerable<Tasks>> GetTasksForUser(string userId);
+        public Task<IEnumerable<Tasks>> GetTasksForUser(string userId,Func<Tasks, bool>? filter = null);
 
         public Task DeleteTask(Tasks task);
+
+        public Task UpdateTask(Tasks task);
     }
 }

@@ -18,54 +18,62 @@ namespace API.Controllers
     {
         private ITasksService _taskService;
         private UserManager<IdentityUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public TasksController(ITasksService taskService, UserManager<IdentityUser> userManager)
+        public TasksController(ITasksService taskService, UserManager<IdentityUser> userManager, IMapper mapper)
         {
             _taskService = taskService;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTask(Tasks task)
+        public async Task<IActionResult> AddTask(TaskInputModel task)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest("Invalid model");
             }
 
-            var user = await _userManager.FindByIdAsync(task.UserId);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(user!= null)
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user == null)
             {
-                task.User = user;
+                return BadRequest("Invalid user");
             }
 
-            await _taskService.AddTask(task);
+
+            var taskToCreate = _mapper.Map<Tasks>(task);
+            taskToCreate.UserId = userId;
+
+            await _taskService.AddTask(taskToCreate);
 
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTasks()
-        {            
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+        public async Task<IActionResult> GetTasksWithFilter([FromQuery]DAL.Models.TaskStatus? status)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            string userName = User.FindFirstValue(ClaimTypes.Name);
-            
-            if(userId == null)
+            if(status == null)
             {
-                var user = await _userManager.FindByNameAsync(userName);
-                userId = user.Id;
-            }
-            var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
+                var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
 
-            return Ok(tasks);
+                return Ok(tasks);
+            }
+
+            var filteredTasks = await _taskService.GetTasksForUser(userId,(x=>x.Status == status));
+
+            return Ok(filteredTasks);
         }
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             string userName = User.FindFirstValue(ClaimTypes.Name);
             
@@ -84,7 +92,25 @@ namespace API.Controllers
 
             await _taskService.DeleteTask(task);
 
-            return Ok("Task was deleted");
+            return Ok();
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> UpdateTask(TaskInputModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Invalid model");
+            }
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+
+            var task = _mapper.Map<Tasks>(model);
+
+            await _taskService.UpdateTask(task);
+
+            return Ok();
         }
     }
 }

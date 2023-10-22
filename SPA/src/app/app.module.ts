@@ -6,12 +6,13 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TasksComponent } from './tasks/tasks.component';
 import { AuthGuard } from './helpers/AuthGuard';
 import { AppMenuComponent } from './app-menu/app-menu.component';
 import { TaskCardComponent } from './task-card/task-card.component';
 import { JWTTokenInterceptor } from './helpers/JWTTokenInterceptor';
+import { CreateTaskFormComponent } from './create-task-form/create-task-form.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -26,6 +27,11 @@ const routes: Routes = [
     component: TasksComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'create-task',
+    component: CreateTaskFormComponent,
+    canActivate: [AuthGuard],
+  },
   { path: '**', redirectTo: '/login' },
 ];
 
@@ -37,11 +43,13 @@ const routes: Routes = [
     TasksComponent,
     AppMenuComponent,
     TaskCardComponent,
+    CreateTaskFormComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
+    FormsModule,
     ReactiveFormsModule,
     JwtModule.forRoot({
       config: {

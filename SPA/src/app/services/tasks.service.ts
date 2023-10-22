@@ -13,7 +13,19 @@ export class TasksService {
     return this.http.get<Tasks[]>(this.baseUrl);
   }
 
+  getTasksFiltered(status: string): Observable<Tasks[]> {
+    return this.http.get<Tasks[]>(this.baseUrl + '/?Status=' + status);
+  }
+
   deleteTask(id: number) {
     return this.http.delete(this.baseUrl + '/' + id);
+  }
+
+  createTask(task: Tasks): Observable<any> {
+    return this.http.post(this.baseUrl, task);
+  }
+
+  updateTask(task: Tasks): Observable<any> {
+    return this.http.put(this.baseUrl + '/' + task.id, task);
   }
 }

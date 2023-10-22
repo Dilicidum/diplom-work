@@ -4,6 +4,7 @@ using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,13 +27,16 @@ namespace BLL.Services
 
         public async Task DeleteTask(Tasks task)
         {
-            var subTasks = await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.BaseTaskId);
-
-            if (subTasks.Any())
+            if(task.BaseTaskId.HasValue)
             {
-                foreach (var subTask in subTasks)
+                var subTasks = await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.BaseTaskId);
+
+                if (subTasks.Any())
                 {
-                    _unitOfWork.TasksRepository.Delete(subTask);
+                    foreach (var subTask in subTasks)
+                    {
+                        _unitOfWork.TasksRepository.Delete(subTask);
+                    }
                 }
             }
 
@@ -40,9 +44,20 @@ namespace BLL.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId)
+        public async Task UpdateTask(Tasks task)
+        {
+            _unitOfWork.TasksRepository.Update(task);
+            await _unitOfWork.Save();
+        }
+
+        public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId,Func<Tasks, bool>? filter = null)
         {
             var tasks = await _unitOfWork.TasksRepository.Get(x=>x.UserId == userId);
+
+            if(filter != null)
+            {
+                tasks = tasks.Where(filter);
+            }
 
             return tasks;
         }

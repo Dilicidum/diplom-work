@@ -11,23 +11,31 @@ export interface Tasks {
 }
 
 export enum TaskCategory {
-  Fitness = 'Fitness', //0
-  Food = 'Food', //1
-  Work = 'Work', //2
-  University = 'University', //3
-  Health = 'Health', //4
-  Friends = 'Friends', //5
-  Family = 'Family', //6
+  fitness = 'Fitness', //0
+  food = 'Food', //1
+  work = 'Work', //2
+  university = 'University', //3
+  health = 'Health', //4
+  friends = 'Friends', //5
+  family = 'Family', //6
 }
 
 export enum TaskType {
-  Task = 'Task',
-  SubTask = 'SubTask',
+  task = 'Task',
+  subTask = 'SubTask',
 }
 
 export enum TaskStatus {
-  None = 'None',
-  Progress = 'Progress',
-  Done = 'Done',
-  Rejected = 'Rejected',
+  none = 'None',
+  progress = 'Progress',
+  done = 'Done',
+  rejected = 'Rejected',
+}
+
+export enum TaskStatusSort {
+  none = 'None',
+  progress = 'Progress',
+  done = 'Done',
+  rejected = 'Rejected',
+  All = 'All',
 }

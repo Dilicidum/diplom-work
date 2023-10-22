@@ -14,12 +14,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -37,6 +44,8 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
         })
     );
+
+
 
 builder.Services.AddDbContext<ApplicationContext>(options => 
         options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));

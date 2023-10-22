@@ -5,5 +5,9 @@
         Logout
       </button>
     </div>
+    <div class="p-2">
+      <button class="btn btn-primary mat-headline text-dark" *ngIf="authService.isLoggedIn$ | async" routerLink="/tasks">
+        Tasks
+      </button>
   </div>
 </div>

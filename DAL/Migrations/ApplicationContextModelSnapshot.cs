@@ -61,8 +61,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("BaseTaskId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
@@ -272,8 +271,8 @@ namespace DAL.Migrations
                         .HasForeignKey("BaseTaskId");
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithOne()
-                        .HasForeignKey("DAL.Models.Tasks", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

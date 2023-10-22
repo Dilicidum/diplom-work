@@ -1,3 +1,22 @@
-<div *ngFor="let task of tasks$ | async">
-  <app-task-card [task]="task"></app-task-card>
+<div class="container" style="display: flex;">
+  <div style="width: 50%;">
+    <ng-template #noTasks>
+      <div style="text-align: center;">No tasks available</div>
+    </ng-template>
+    <div style="text-align: center; margin-bottom: 10px;">
+      <button routerLink="/create-task" type="button" class="btn btn-primary text-dark">Create task</button>
+    </div>
+    <div class="d-flex flex-row justify-content-between" style="margin-bottom: 10px; ">
+      <label for="category">Status</label>
+      <select id="category" [(ngModel)]="StatusSort" (ngModelChange)="StatusSortChange($event)" class="form-control">
+        <option  *ngFor="let key of taskStatuses" [value]="TaskStatus[key]">{{TaskStatus[key]}}</option>
+      </select>
+    </div>
+    <div *ngIf="(tasks$ | async)?.length; else noTasks">
+      <div *ngFor="let task of tasks$ | async" style="margin-bottom: 10vh;">
+        <app-task-card (deleteEvent)="refreshPage()" [task]="task"></app-task-card>
+      </div>
+    </div>
+  </div>
 </div>
+

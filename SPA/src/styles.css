@@ -6,8 +6,13 @@
   left: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: pink !important;
 }
+
 
 
 .btn-primary{
@@ -29,4 +34,31 @@
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-color: pink; }
+
+.form{
+  border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+  padding: 2%;
+  background: white;
+  box-shadow: 20px 20px rgba(0,0,0,.15);
+  transition: all .4s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* This ensures padding and border are included in the element's total width and height */
+}
+
+html, body {
+  height: 100vh; /* This makes the body the full height of the viewport */
+  background-color: pink; /* Apply background color */
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh; /* 100% viewport height */
+  background-color: pink; /* Ensure background color is set */
+}
