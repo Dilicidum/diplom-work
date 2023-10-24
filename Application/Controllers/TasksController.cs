@@ -44,19 +44,6 @@ namespace API.Controllers
             }
 
             var taskToCreate = _mapper.Map<Tasks>(task);
-
-            if(task.TaskType == TaskType.SubTask)
-            {
-                var baseTaskExists = await _taskService.ValidateTaskExistence(task.BaseTaskId,TaskType.Task);
-
-                if(baseTaskExists)
-                {
-                    await _taskService.AddTask(taskToCreate);
-                    return Ok();
-                }
-
-                return BadRequest();
-            }
             
             await _taskService.AddTask(taskToCreate);
 
@@ -67,10 +54,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetTasksWithFilter([FromQuery]DAL.Models.TaskStatus? status, [FromQuery]TaskType? taskType)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            
-                var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
-
+            var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
             
             Func<Tasks, bool> filter = x => 
             (!status.HasValue || x.Status == status.Value) && 
@@ -100,20 +84,11 @@ namespace API.Controllers
         public async Task<IActionResult> Delete(int Id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            string userName = User.FindFirstValue(ClaimTypes.Name);
-            
-            if(userId == null)
-            {
-                var user = await _userManager.FindByNameAsync(userName);
-                userId = user.Id;
-            }
-
             var task = (await _taskService.GetTasksForUser(userId)).FirstOrDefault(x=>x.Id == Id);
 
             if(task == null)
             {
-                return BadRequest();
+                return BadRequest("Task not found");
             }
 
             await _taskService.DeleteTask(task);
@@ -130,7 +105,6 @@ namespace API.Controllers
             }
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
 
             var task = _mapper.Map<Tasks>(model);
 

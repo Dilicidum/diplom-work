@@ -21,6 +21,16 @@ namespace BLL.Services
 
         public async Task AddTask(Tasks task)
         {
+            if(task.TaskType == TaskType.SubTask)
+            {
+                var baseTaskExists = await ValidateTaskExistence(task.BaseTaskId,TaskType.Task);
+
+                if(!baseTaskExists)
+                {
+                    return;
+                }
+            } 
+
             await _unitOfWork.TasksRepository.Add(task);
             await _unitOfWork.Save();
         }
