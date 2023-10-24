@@ -20,6 +20,7 @@ export class AuthService {
 
         localStorage.setItem('token', res.token);
         localStorage.setItem('userId', res.userId);
+        console.log(localStorage.getItem('token'));
         this.isLoggedIn$.next(true);
       })
     );
@@ -31,8 +32,9 @@ export class AuthService {
 
   logout() {
     this.isLoggedIn$.next(false);
-    console.log('remove token');
+
     localStorage.removeItem('token');
+    console.log(localStorage.getItem('token'));
   }
 
   isAuthenticated() {

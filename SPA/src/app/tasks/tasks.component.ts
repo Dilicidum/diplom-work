@@ -28,6 +28,7 @@ export class TasksComponent implements OnInit {
   }
 
   StatusSortChange(value: any) {
+    this.taskType = TaskType.task;
     this.StatusSort = value;
     if (this.StatusSort != TaskStatusSort.All) {
       this.tasks$ = this.taskService.getTasks(this.StatusSort, this.taskType);

@@ -43,11 +43,11 @@
 
     <div class="d-flex flex-row justify-content-between">
       <div class="p-2 form-group" *ngIf="taskForm.disabled">
-        <button (click)="edit()" class="btn btn-primary text-dark">Edit</button>
+        <button type="button" (click)="edit()" class="btn btn-primary text-dark">Edit</button>
       </div>
 
       <div class="p-2 form-group" *ngIf="taskForm.enabled">
-        <button (click)="discard()" [disabled]="taskForm.invalid" class="btn btn-primary text-dark">Discard</button>
+        <button type="button" (click)="discard()" [disabled]="taskForm.invalid" class="btn btn-primary text-dark">Discard</button>
       </div>
 
       <div class="p-2 form-group" *ngIf="taskForm.enabled">
@@ -55,7 +55,7 @@
       </div>
 
       <div class="p-2 form-group">
-        <button (click)="Delete()" class="btn btn-primary text-dark">Delete</button>
+        <button type="button" (click)="Delete()" class="btn btn-primary text-dark">Delete</button>
       </div>
     </div>
 

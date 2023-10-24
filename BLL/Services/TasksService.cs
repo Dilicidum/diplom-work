@@ -27,9 +27,9 @@ namespace BLL.Services
 
         public async Task DeleteTask(Tasks task)
         {
-            if(task.BaseTaskId.HasValue)
+            if(task.TaskType == TaskType.Task)
             {
-                var subTasks = await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.BaseTaskId);
+                var subTasks = await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.Id);
 
                 if (subTasks.Any())
                 {

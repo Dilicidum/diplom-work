@@ -24,15 +24,6 @@
   background-color: 	#ffe9e9 !important;
 }
 
-.time {
-  display: none !important;
-}
-
-
-.border-btm :active {
-  border-bottom: 4px solid #fff0f0;
-}
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-color: pink; }
 
