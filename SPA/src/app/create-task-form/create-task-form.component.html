@@ -1,0 +1,50 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="container-fluid h-100 d-flex justify-content-center align-items-center flex-column">
+  <div class="form">
+    <div class="d-flex flex-row justify-content-between">
+      <div>
+        <div class="p-2 form-group">
+          <label for="Name">Name</label>
+          <input type="text" id="Name" class="form-control" formControlName="name" placeholder="Enter task name">
+        </div>
+
+        <div class="p-2 form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" formControlName="description" class="form-control" placeholder="Enter description">
+        </div>
+
+        <div class="p-2 form-group">
+          <label for="type">Type</label>
+          <select id="type" formControlName="type" class="form-control">
+            <option>{{TaskType}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <div class="p-2 form-group">
+          <label for="category">Category</label>
+          <select id="category" formControlName="category" class="form-control">
+            <option  *ngFor="let key of taskCategories" [value]="TaskCategory[key]">{{TaskCategory[key]}}</option>
+          </select>
+        </div>
+
+        <div class="p-2 form-group">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status" class="form-control">
+            <option  *ngFor="let key of taskStatuses" [value]="TaskStatus[key]">{{TaskStatus[key]}}</option>
+          </select>
+        </div>
+
+        <div class="p-2 form-group">
+          <label for="date">due date</label>
+          <input type="date" id="date" formControlName="dueDate" class="form-control" placeholder="Fill due date for task">
+        </div>
+      </div>
+    </div>
+
+    <div class="p-2 form-group" *ngIf="taskForm.enabled">
+      <button type="submit" [disabled]="taskForm.invalid" class="btn btn-primary text-dark">Submit</button>
+    </div>
+
+  </div>
+</form>
