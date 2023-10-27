@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="d-flex flex-column">
+    <div class="p-2">
+      <label style="margin-left: 20px;">Main task</label>
+      <app-task-card (deleteEvent)="refreshPage()" [task]="(task$ | async)" [isDetailed]="true"></app-task-card>
+    </div>
+  </div>
+  <div class="d-flex flex-column" *ngIf="(this.task$ | async) as task;" style="margin-left: 10vh;">
+    <div class="p-2">
+      <button routerLink="/create-task" [queryParams]="{ type: 'SubTask', 'baseTaskId': task.id }"  class="btn btn-primary text-dark">Create Sub task</button>
+    </div>
+
+    <div class="p-2">
+      <div *ngIf="task.subTasks && task.subTasks.length > 0">
+        <label style="margin-left: 20px;">Sub tasks</label>
+        <div class="d-flex flex-column" *ngFor="let subTask of task.subTasks" style="margin-bottom: 5vh;">
+          <app-task-card (deleteEvent)="refreshPage()" [task]="subTask" [isDetailed]="true"></app-task-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-2">
+      <div *ngIf="(task.subTasks && task.subTasks.length == 0) || task.subTasks == null">
+        <label style="margin-left: 20px;">No sub tasks</label>
+      </div>
+    </div>
+</div>
+
