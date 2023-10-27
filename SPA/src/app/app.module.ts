@@ -38,6 +38,7 @@ const routes: Routes = [
     component: TaskInfoComponent,
     canActivate: [AuthGuard],
   },
+  { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({

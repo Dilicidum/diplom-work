@@ -38,5 +38,16 @@ export enum TaskStatusSort {
   progress = 'Progress',
   done = 'Done',
   rejected = 'Rejected',
-  All = 'All',
+  All = '',
+}
+
+export enum TaskCategorySort {
+  All = '',
+  fitness = 'Fitness', //0
+  food = 'Food', //1
+  work = 'Work', //2
+  university = 'University', //3
+  health = 'Health', //4
+  friends = 'Friends', //5
+  family = 'Family', //6
 }

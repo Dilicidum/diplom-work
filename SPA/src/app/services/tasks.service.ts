@@ -7,11 +7,22 @@ import { Tasks } from '../models/tasks';
 })
 export class TasksService {
   baseUrl: string = 'http://localhost:5292/Tasks';
+
   constructor(private http: HttpClient) {}
 
-  getTasks(status: string = '', taskType: string = ''): Observable<Tasks[]> {
+  getTasks(
+    taskType: string,
+    status: string = '',
+    taskCategory: string = ''
+  ): Observable<Tasks[]> {
     return this.http.get<Tasks[]>(
-      this.baseUrl + '/?Status=' + status + '&TaskType=' + taskType
+      this.baseUrl +
+        '/?TaskType=' +
+        taskType +
+        '&Status=' +
+        status +
+        '&Category=' +
+        taskCategory
     );
   }
 
