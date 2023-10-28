@@ -64,9 +64,9 @@ namespace DAL.Repositories
             _context.Entry(entity).State = EntityState.Modified;
         }
 
-        public IEnumerable<TEntity> Find(Specification<TEntity> spec)
+        public async Task<IEnumerable<TEntity>> Find(Specification<TEntity> spec)
         {
-            return _context.Set<TEntity>().Where(spec.IsSatisfiedBy);
+            return (await _context.Set<TEntity>().ToListAsync()).Where(spec.IsSatisfiedBy);
         }
     }
 }

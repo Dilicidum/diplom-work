@@ -94,9 +94,9 @@ namespace BLL.Services
             return false;
         }
 
-        public IEnumerable<Tasks> GetTasksForUser(string userId, Specification<Tasks> specification)
+        public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId, Specification<Tasks> specification)
         {
-            var tasks = _unitOfWork.TasksRepository.Find(specification).Where(x=>x.UserId == userId);
+            var tasks = (await _unitOfWork.TasksRepository.Find(specification)).Where(x=>x.UserId == userId);
             return tasks;
         }
     }

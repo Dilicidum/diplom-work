@@ -18,7 +18,7 @@ namespace DAL.Interfaces
 
         public void Update(TEntity entityToUpdate);
 
-        public IEnumerable<TEntity> Find(Specification<TEntity> specification);
+        public Task<IEnumerable<TEntity>> Find(Specification<TEntity> specification);
 
         public void DeleteById(object id);
 

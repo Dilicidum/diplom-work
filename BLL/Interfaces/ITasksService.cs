@@ -21,6 +21,6 @@ namespace BLL.Interfaces
 
         public Task<bool> ValidateTaskExistence(int? taskId, TaskType? taskType);
 
-        public IEnumerable<Tasks> GetTasksForUser(string userId, Specification<Tasks> specification);
+        public Task<IEnumerable<Tasks>> GetTasksForUser(string userId, Specification<Tasks> specification);
     }
 }

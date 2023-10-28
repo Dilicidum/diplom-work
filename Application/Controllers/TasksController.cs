@@ -19,13 +19,11 @@ namespace API.Controllers
     public class TasksController:ControllerBase
     {
         private ITasksService _taskService;
-        private UserManager<IdentityUser> _userManager;
         private readonly IMapper _mapper;
 
-        public TasksController(ITasksService taskService, UserManager<IdentityUser> userManager, IMapper mapper)
+        public TasksController(ITasksService taskService, IMapper mapper)
         {
             _taskService = taskService;
-            _userManager = userManager;
             _mapper = mapper;
         }
 
@@ -55,7 +53,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetTasksWithFilter([FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
             TaskTypeSpecification taskTypeSpecification = new TaskTypeSpecification(taskType);
             Specification<Tasks> specification = taskTypeSpecification;
             
@@ -69,7 +66,7 @@ namespace API.Controllers
                 specification = specification.AndSpecification(new TaskCategorySpecification(category.Value));
             }
 
-            var filteredTasks = _taskService.GetTasksForUser(userId, specification);
+            var filteredTasks = await _taskService.GetTasksForUser(userId, specification);
 
             return Ok(filteredTasks);
         }
@@ -112,8 +109,6 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid model");
             }
-
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var task = _mapper.Map<Tasks>(model);
 

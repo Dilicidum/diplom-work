@@ -28,7 +28,7 @@ namespace API.Controllers
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegistrationModel model)
-        {
+        {   
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -61,8 +61,6 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var user = _mapper.Map<IdentityUser>(model);
 
             var signedUser = await _userManager.FindByEmailAsync(model.Email);
 
