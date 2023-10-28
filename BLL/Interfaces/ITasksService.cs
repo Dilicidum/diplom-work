@@ -1,4 +1,6 @@
-﻿using DAL.Models;
+﻿using DAL.Interfaces;
+using DAL.Models;
+using DAL.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +20,7 @@ namespace BLL.Interfaces
         public Task UpdateTask(Tasks task);
 
         public Task<bool> ValidateTaskExistence(int? taskId, TaskType? taskType);
+
+        public IEnumerable<Tasks> GetTasksForUser(string userId, Specification<Tasks> specification);
     }
 }

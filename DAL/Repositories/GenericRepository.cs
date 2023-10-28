@@ -1,4 +1,5 @@
 ﻿using DAL.Interfaces;
+using DAL.Specifications;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,23 +41,17 @@ namespace DAL.Repositories
             Delete(entityToDelete);
         }
 
-        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity,bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity,bool>> filter = null)
         {
-             IQueryable<TEntity> query = _dbSet;
+            IQueryable<TEntity> query = _dbSet;
 
             if (filter != null)
             {
                 query = query.Where(filter);
             }
 
-            if (orderBy != null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-            else
-            {
-                return await query.ToListAsync();
-            }
+            return await query.ToListAsync();
+            
         }
 
         public async Task<TEntity> GetById(object id)
@@ -67,6 +62,11 @@ namespace DAL.Repositories
         public void Update(TEntity entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public IEnumerable<TEntity> Find(Specification<TEntity> spec)
+        {
+            return _context.Set<TEntity>().Where(spec.IsSatisfiedBy);
         }
     }
 }

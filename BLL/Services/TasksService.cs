@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using DAL.Interfaces;
 using DAL.Models;
+using DAL.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,6 +92,12 @@ namespace BLL.Services
             }
 
             return false;
+        }
+
+        public IEnumerable<Tasks> GetTasksForUser(string userId, Specification<Tasks> specification)
+        {
+            var tasks = _unitOfWork.TasksRepository.Find(specification).Where(x=>x.UserId == userId);
+            return tasks;
         }
     }
 }

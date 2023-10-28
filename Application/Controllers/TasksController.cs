@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using DAL.Specifications;
 
 namespace API.Controllers
 {
@@ -51,16 +52,24 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTasksWithFilter([FromQuery]DAL.Models.TaskStatus? status, [FromQuery]TaskType? taskType)
+        public async Task<IActionResult> GetTasksWithFilter([FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var tasks = (await _taskService.GetTasksForUser(userId)).ToList();
+            TaskTypeSpecification taskTypeSpecification = new TaskTypeSpecification(taskType);
+            Specification<Tasks> specification = taskTypeSpecification;
             
-            Func<Tasks, bool> filter = x => 
-            (!status.HasValue || x.Status == status.Value) && 
-            (!taskType.HasValue || x.TaskType == taskType.Value);
+            if(status.HasValue)
+            {
+                specification = specification.AndSpecification(new StatusSpecification(status.Value));
+            }
 
-            var filteredTasks = await _taskService.GetTasksForUser(userId,filter);
+            if(category.HasValue)
+            {
+                specification = specification.AndSpecification(new TaskCategorySpecification(category.Value));
+            }
+
+            var filteredTasks = _taskService.GetTasksForUser(userId, specification);
 
             return Ok(filteredTasks);
         }

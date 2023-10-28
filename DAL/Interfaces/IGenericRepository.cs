@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Specifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,13 +10,15 @@ namespace DAL.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        public Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity,bool>> filter = null,Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null);
+        public Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity,bool>> filter = null);
 
         public Task<TEntity> GetById(object id);
 
         public Task Add(TEntity entity);
 
         public void Update(TEntity entityToUpdate);
+
+        public IEnumerable<TEntity> Find(Specification<TEntity> specification);
 
         public void DeleteById(object id);
 
