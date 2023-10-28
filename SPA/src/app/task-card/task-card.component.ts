@@ -41,7 +41,6 @@ export class TaskCardComponent implements OnChanges {
   }
 
   updateForm(data: Tasks): void {
-    console.log('task = ', this.task);
     if (!(this.task.dueDate instanceof Date)) {
       this.task.dueDate = new Date(this.task.dueDate);
     }

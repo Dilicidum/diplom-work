@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserLoginModel } from '../models/userLoginModel';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { UserRegistrationModel } from '../models/userRegistrationModel';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -9,6 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
+  private _token = '';
   loginUrl: string = 'http://localhost:5292/Authentication/Login';
   registrationUrl: string = 'http://localhost:5292/Authentication/Register';
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
@@ -16,11 +17,8 @@ export class AuthService {
   login(data: UserLoginModel) {
     return this.http.post(this.loginUrl, data).pipe(
       tap((res: any) => {
-        console.log('res = ', res);
-
         localStorage.setItem('token', res.token);
         localStorage.setItem('userId', res.userId);
-        console.log(localStorage.getItem('token'));
         this.isLoggedIn$.next(true);
       })
     );
@@ -32,9 +30,7 @@ export class AuthService {
 
   logout() {
     this.isLoggedIn$.next(false);
-
     localStorage.removeItem('token');
-    console.log(localStorage.getItem('token'));
   }
 
   isAuthenticated() {
@@ -49,5 +45,11 @@ export class AuthService {
     this.isAuthenticated()
   );
 
-  token: string = localStorage.getItem('token') || '';
+  get token() {
+    return localStorage.getItem('token');
+  }
+
+  set token(value: any) {
+    this._token = value;
+  }
 }
