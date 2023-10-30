@@ -20,7 +20,7 @@ namespace DAL.Interfaces
 
         public Task<IEnumerable<TEntity>> Find(Specification<TEntity> specification);
 
-        public void DeleteById(object id);
+        public Task DeleteById(object id);
 
         public void Delete(TEntity entity);
     }

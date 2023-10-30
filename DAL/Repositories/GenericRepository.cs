@@ -35,9 +35,9 @@ namespace DAL.Repositories
             _dbSet.Remove(entity);
         }
 
-        public void DeleteById(object id)
+        public async Task DeleteById(object id)
         {
-            TEntity entityToDelete = _dbSet.Find(id);
+            TEntity entityToDelete = await _dbSet.FindAsync(id);
             Delete(entityToDelete);
         }
 
