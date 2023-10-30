@@ -13,8 +13,6 @@
   background-color: pink !important;
 }
 
-
-
 .btn-primary{
   background-color: pink !important;
   border-color: pink !important;
@@ -24,8 +22,7 @@
   background-color: 	#ffe9e9 !important;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-color: pink; }
+body {font-family: Roboto, "Helvetica Neue", sans-serif; background-color: pink; }
 
 .form{
   border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
@@ -35,21 +32,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-c
   transition: all .4s ease;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* This ensures padding and border are included in the element's total width and height */
-}
-
 html, body {
-  height: 100vh; /* This makes the body the full height of the viewport */
-  background-color: pink; /* Apply background color */
+  height: 100vh;
+  background-color: pink;
 }
 
-:host {
+.container{
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh; /* 100% viewport height */
-  background-color: pink; /* Ensure background color is set */
+  justify-content: center;
+  align-items: center;
 }
