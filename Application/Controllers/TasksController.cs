@@ -105,7 +105,7 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            var taskExists = await _taskService.ValidateTaskExistence(model.Id,model.TaskType);
+            var taskExists = await _taskService.ValidateTaskExistence(model.Id);
 
             if(!taskExists)
             {
