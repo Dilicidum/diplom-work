@@ -24,20 +24,24 @@ namespace API.Controllers
 
 
         [HttpGet("{userId}")]
-        public async Task<IdentityUser> GetUserById(string userId)
+        public async Task<IActionResult> GetUserById(string userId)
         {
             var res = await _userManager.FindByIdAsync(userId);
             
-            return res;
+            if(res == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(res);
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<IEnumerable<IdentityUser>> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var res = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
 
-            return res;
+            return Ok(users);
         }
 
         [HttpPost]
@@ -48,7 +52,7 @@ namespace API.Controllers
 
             if (!res.Succeeded)
             {
-                return BadRequest("Error when creating user");
+                return BadRequest();
             }
             
             var role = await _roleManager.FindByNameAsync(user.Role);
@@ -59,11 +63,11 @@ namespace API.Controllers
 
                 if (!roleResult.Succeeded)
                 {
-                    return BadRequest("Role adding failed");
+                    return BadRequest();
                 }
             }
             
-            return Ok("User was created");
+            return CreatedAtAction(nameof(GetUserById),new {Id = identityUser.Id },identityUser);
         }
     }
 }

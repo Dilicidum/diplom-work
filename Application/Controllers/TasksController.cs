@@ -34,7 +34,7 @@ namespace API.Controllers
 
             if(task.UserId != userId)
             {
-                return BadRequest("Invalid user");
+                return BadRequest();
             }
 
             var taskToCreate = _mapper.Map<Tasks>(task);
