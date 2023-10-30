@@ -43,11 +43,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserRegistrationModel user)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest("Model you provide is invalid, please try again");
-            }
-
             var identityUser = _mapper.Map<IdentityUser>(user);
             var res = await _userManager.CreateAsync(identityUser,user.Password);
 

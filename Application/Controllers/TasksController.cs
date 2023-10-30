@@ -30,11 +30,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTask(TaskInputModel task)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest("Invalid model");
-            }
-
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if(task.UserId != userId)
@@ -46,7 +41,7 @@ namespace API.Controllers
             
             await _taskService.AddTask(taskToCreate);
 
-            return Ok();
+            return CreatedAtAction(nameof(GetTaskById),new {Id = taskToCreate.Id}, taskToCreate);
         }
 
         [HttpGet]
@@ -79,7 +74,7 @@ namespace API.Controllers
 
             if(task == null)
             {
-                return BadRequest("Task not found");
+                return NotFound();
             }
 
             return Ok(task);
@@ -94,27 +89,34 @@ namespace API.Controllers
 
             if(task == null)
             {
-                return BadRequest("Task not found");
+                return NotFound();
             }
 
             await _taskService.DeleteTask(task);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateTask(TaskInputModel model)
+        public async Task<IActionResult> UpdateTask(int Id,TaskInputModel model)
         {
-            if(!ModelState.IsValid)
+            if(Id != model.Id)
             {
-                return BadRequest("Invalid model");
+                return BadRequest();
+            }
+
+            var taskExists = await _taskService.ValidateTaskExistence(model.Id,model.TaskType);
+
+            if(!taskExists)
+            {
+                return NotFound();
             }
 
             var task = _mapper.Map<Tasks>(model);
 
             await _taskService.UpdateTask(task);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
