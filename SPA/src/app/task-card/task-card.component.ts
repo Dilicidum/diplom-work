@@ -67,6 +67,7 @@ export class TaskCardComponent implements OnChanges {
 
   onSubmit() {
     this.task.name = this.taskForm.get('name').value;
+    console.log(this.taskForm.get('description').value);
     this.task.description = this.taskForm.get('description').value;
     this.task.category = this.taskForm.get('category').value;
     this.task.status = this.taskForm.get('status').value;

@@ -105,14 +105,14 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            var taskExists = await _taskService.ValidateTaskExistence(model.Id);
+            var task = (await _taskService.GetTasksForUser(model.UserId, x => x.Id == Id)).FirstOrDefault();
 
-            if(!taskExists)
+            if(task == null)
             {
                 return NotFound();
             }
-
-            var task = _mapper.Map<Tasks>(model);
+                
+            _mapper.Map(model,task); 
 
             await _taskService.UpdateTask(task);
 
