@@ -5,6 +5,7 @@ import { Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Roles } from '../models/roles';
 import { UserRegistrationModel } from '../models/userRegistrationModel';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -15,7 +16,8 @@ export class RegisterComponent implements OnInit {
   roles = Object.values(Roles);
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.registrationForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -48,5 +50,6 @@ export class RegisterComponent implements OnInit {
         console.log(err);
       },
     });
+    this.router.navigate(['/login']);
   }
 }
