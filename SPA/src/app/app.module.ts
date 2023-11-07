@@ -14,6 +14,9 @@ import { TaskCardComponent } from './task-card/task-card.component';
 import { JWTTokenInterceptor } from './helpers/JWTTokenInterceptor';
 import { CreateTaskFormComponent } from './create-task-form/create-task-form.component';
 import { TaskInfoComponent } from './task-info/task-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { NotificationItemComponent } from './notification-item/notification-item.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -51,6 +54,8 @@ const routes: Routes = [
     TaskCardComponent,
     CreateTaskFormComponent,
     TaskInfoComponent,
+    NotificationsComponent,
+    NotificationItemComponent,
   ],
   imports: [
     BrowserModule,
