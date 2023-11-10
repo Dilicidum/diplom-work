@@ -1,0 +1,16 @@
+
+<ng-template #noNotifications>
+  <div class="p-2">No notifications</div>
+</ng-template>
+<div>
+  <button class="btn btn-primary mat-headline text-dark" (click)="showNotification()">
+    Notifications
+  </button>
+</div>
+<div *ngIf="showNotifications" style="position: absolute;z-index: 1000;">
+  <div *ngIf="(notifications$ | async)?.length; else noNotifications">
+    <div *ngFor="let notification of notifications$ | async">
+      <app-notification-item [notification]="notification"></app-notification-item>
+    </div>
+</div>
+</div>
