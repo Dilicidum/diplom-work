@@ -9,13 +9,18 @@ import {
   Tasks,
 } from '../models/tasks';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css'],
 })
 export class TasksComponent implements OnInit {
-  constructor(private taskService: TasksService) {}
+  constructor(
+    private taskService: TasksService,
+    private route: ActivatedRoute
+  ) {}
 
   StatusSort: any;
   CategorySort: any;
@@ -25,21 +30,27 @@ export class TasksComponent implements OnInit {
   taskCategories: string[];
   Tasks: Tasks[] = [];
   taskType = TaskType.task;
-
+  userId: string = '';
   tasks$: Observable<Tasks[]>;
+
   ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.userId = params.get('userId');
+      if (this.userId == null) this.userId = localStorage.getItem('userId');
+    });
+
     this.StatusSort = TaskStatusSort.All;
     this.CategorySort = TaskCategorySort.All;
     this.taskStatuses = Object.keys(this.TaskStatus);
     this.taskCategories = Object.keys(this.TaskCategory);
     this.taskType = TaskType.task;
-    console.log(this.taskType);
-    this.tasks$ = this.taskService.getTasks(this.taskType);
+    this.tasks$ = this.taskService.getTasks(this.userId, this.taskType);
   }
 
   StatusSortChange(value: any) {
     this.StatusSort = value;
     this.tasks$ = this.taskService.getTasks(
+      this.userId,
       this.taskType,
       this.StatusSort,
       this.CategorySort
@@ -49,6 +60,7 @@ export class TasksComponent implements OnInit {
   CategorySortChange(value: any) {
     this.CategorySort = value;
     this.tasks$ = this.taskService.getTasks(
+      this.userId,
       this.taskType,
       this.StatusSort,
       this.CategorySort
@@ -56,6 +68,6 @@ export class TasksComponent implements OnInit {
   }
 
   refreshPage() {
-    this.tasks$ = this.taskService.getTasks(this.taskType);
+    this.tasks$ = this.taskService.getTasks(this.userId, this.taskType);
   }
 }

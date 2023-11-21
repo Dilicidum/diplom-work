@@ -77,8 +77,10 @@ export class TaskCardComponent implements OnChanges {
   }
 
   Delete() {
-    this.taskService.deleteTask(this.task.id).subscribe((data) => {
-      this.deleteEvent.emit();
-    });
+    this.taskService
+      .deleteTask(this.task.userId, this.task.id)
+      .subscribe((data) => {
+        this.deleteEvent.emit();
+      });
   }
 }

@@ -11,12 +11,13 @@ export class TasksService {
   constructor(private http: HttpClient) {}
 
   getTasks(
+    userId: string,
     taskType: string,
     status: string = '',
     taskCategory: string = ''
   ): Observable<Tasks[]> {
     return this.http.get<Tasks[]>(
-      this.baseUrl +
+      `http://localhost:5292/Users/${userId}/Tasks` +
         '/?TaskType=' +
         taskType +
         '&Status=' +
@@ -26,19 +27,29 @@ export class TasksService {
     );
   }
 
-  deleteTask(id: number) {
-    return this.http.delete(this.baseUrl + '/' + id);
+  deleteTask(userId: string, taskId: number) {
+    return this.http.delete(
+      `http://localhost:5292/Users/${userId}/Tasks/` + taskId
+    );
   }
 
   createTask(task: Tasks): Observable<any> {
-    return this.http.post(this.baseUrl, task);
+    return this.http.post(
+      `http://localhost:5292/Users/${task.userId}/Tasks/`,
+      task
+    );
   }
 
   updateTask(task: Tasks): Observable<any> {
-    return this.http.put(this.baseUrl + '/' + task.id, task);
+    return this.http.put(
+      `http://localhost:5292/Users/${task.userId}/Tasks/` + task.id,
+      task
+    );
   }
 
-  getTaskById(id: number): Observable<Tasks> {
-    return this.http.get<Tasks>(this.baseUrl + '/' + id);
+  getTaskById(userId: string, taskId: number): Observable<Tasks> {
+    return this.http.get<Tasks>(
+      `http://localhost:5292/Users/${userId}/Tasks/` + taskId
+    );
   }
 }

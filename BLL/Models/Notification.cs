@@ -11,5 +11,7 @@ namespace BLL.Models
         public int TaskId { get; set; }
 
         public string Title { get; set; }
+
+        public string UserId { get; set; }
     }
 }

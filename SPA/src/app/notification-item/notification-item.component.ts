@@ -14,7 +14,9 @@ export class NotificationItemComponent {
 
   navigateToTask() {
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/tasks/' + this.notification.taskId]);
+      this.router.navigate([
+        '/tasks/' + this.notification.taskId + '/' + this.notification.userId,
+      ]);
     });
   }
 }

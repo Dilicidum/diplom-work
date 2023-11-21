@@ -61,7 +61,7 @@
 
     <div class="d-flex" *ngIf="isDetailed==false">
       <div class="p-2 form-group">
-        <button class="btn btn-primary text-dark" [routerLink]="['/tasks',task.id]">More detailed info</button>
+        <button class="btn btn-primary text-dark" [routerLink]="['/tasks',task.id,task.userId]">More detailed info</button>
       </div>
     </div>
   </div>

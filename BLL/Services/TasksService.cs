@@ -88,5 +88,17 @@ namespace BLL.Services
             var tasks = (await _unitOfWork.TasksRepository.Find(specification)).Where(x=>x.UserId == userId);
             return tasks;
         }
+
+        public async Task<Tasks> GetTaskById(string userId,int taskId)
+        {
+            var task = (await _unitOfWork.TasksRepository.Get(x=>x.UserId == userId && x.Id == taskId)).FirstOrDefault();
+
+            if(task.TaskType == TaskType.Task)
+            {
+                task.SubTasks = (await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.Id)).ToList();
+            }
+
+            return task;
+        }
     }
 }

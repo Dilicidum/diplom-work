@@ -11,6 +11,9 @@ import { Tasks } from '../models/tasks';
 })
 export class TaskInfoComponent implements OnInit {
   task$: Observable<Tasks>;
+  taskId: string;
+  userId: string;
+
   constructor(
     private taskService: TasksService,
     private route: ActivatedRoute,
@@ -18,8 +21,13 @@ export class TaskInfoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let taskId = this.route.snapshot.params['id'];
-    this.task$ = this.taskService.getTaskById(taskId);
+    this.taskId = this.route.snapshot.paramMap.get('id');
+    this.userId = this.route.snapshot.paramMap.get('userId');
+
+    this.task$ = this.taskService.getTaskById(
+      this.userId,
+      parseInt(this.taskId)
+    );
   }
 
   refreshPage() {

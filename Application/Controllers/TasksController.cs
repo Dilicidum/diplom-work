@@ -15,39 +15,42 @@ namespace API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
     public class TasksController:ControllerBase
     {
-        private ITasksService _taskService;
+        private readonly ITasksService _taskService;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TasksController(ITasksService taskService, IMapper mapper)
+        public TasksController(ITasksService taskService, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             _taskService = taskService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTask(TaskInputModel task)
+        [HttpPost("users/{userId}/tasks")]
+        public async Task<IActionResult> AddTask(string userId,TaskInputModel task)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if(task.UserId != userId)
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier)  || User.IsInRole("Admin")))
             {
-                return BadRequest();
+                return Forbid();
             }
 
             var taskToCreate = _mapper.Map<Tasks>(task);
             
             await _taskService.AddTask(taskToCreate);
 
-            return CreatedAtAction(nameof(GetTaskById),new {Id = taskToCreate.Id}, taskToCreate);
+            return CreatedAtAction(nameof(GetTaskById),new {userId = task.UserId,taskId = taskToCreate.Id}, taskToCreate);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTasksWithFilter([FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
+        [HttpGet("users/{userId}/tasks")]
+        public async Task<IActionResult> GetTasksWithFilter(string userId,[FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier)  || User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             TaskTypeSpecification taskTypeSpecification = new TaskTypeSpecification(taskType);
             Specification<Tasks> specification = taskTypeSpecification;
             
@@ -66,11 +69,15 @@ namespace API.Controllers
             return Ok(filteredTasks);
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetTaskById(int Id)
+        [HttpGet("users/{userId}/tasks/{taskId}")]
+        public async Task<IActionResult> GetTaskById(string userId,int taskId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var task = (await _taskService.GetTasksForUser(userId,x=>x.Id == Id)).SingleOrDefault();
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
+            var task = await _taskService.GetTaskById(userId,taskId);
 
             if(task == null)
             {
@@ -81,11 +88,15 @@ namespace API.Controllers
         }
 
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(int Id)
+        [HttpDelete("users/{userId}/tasks/{taskId}")]
+        public async Task<IActionResult> Delete(string userId,int taskId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var task = (await _taskService.GetTasksForUser(userId)).FirstOrDefault(x=>x.Id == Id);
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
+            var task = (await _taskService.GetTaskById(userId,taskId));
 
             if(task == null)
             {
@@ -97,15 +108,15 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateTask(int Id,TaskInputModel model)
+        [HttpPut("users/{userId}/tasks/{taskId}")]
+        public async Task<IActionResult> UpdateTask(string userId,int taskId,TaskInputModel model)
         {
-            if(Id != model.Id)
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
             {
-                return BadRequest();
+                return Forbid();
             }
 
-            var task = (await _taskService.GetTasksForUser(model.UserId, x => x.Id == Id)).FirstOrDefault();
+            var task = await _taskService.GetTaskById(userId,taskId);
 
             if(task == null)
             {

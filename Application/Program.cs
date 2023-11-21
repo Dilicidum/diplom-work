@@ -53,11 +53,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
             options.SignIn.RequireConfirmedAccount = false;
         }).AddEntityFrameworkStores<ApplicationContext>();
 
-builder.Services.AddAuthorization(options => {
-    options.AddPolicy("EditUsers", policy =>
-    policy.RequireRole("Admin"));
-});
-
 
 builder.Services.AddAuthentication(options =>
 {

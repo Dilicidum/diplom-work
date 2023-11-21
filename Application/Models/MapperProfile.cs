@@ -13,7 +13,8 @@ namespace API.Models
             CreateMap<TaskInputModel,Tasks>().ReverseMap();
             CreateMap<Tasks,Notification>()
                 .ForMember(dest => dest.TaskId,act=>act.MapFrom(x=>x.Id))
-                .ForMember(dest => dest.Title,act=>act.MapFrom(x=>x.Name));
+                .ForMember(dest => dest.Title,act=>act.MapFrom(x=>x.Name))
+                .ForMember(dest => dest.UserId,act=>act.MapFrom(x=>x.UserId));
         }
     }
 }
