@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class UnitOfWork :IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext _context;
-        private readonly IGenericRepository<Tasks> _taskRepository;
-        public UnitOfWork(ApplicationContext context, IGenericRepository<Tasks> taskRepository)
+        private readonly ITasksRepository _taskRepository;
+        public UnitOfWork(ApplicationContext context, ITasksRepository taskRepository)
         {
             _context = context;
             _taskRepository = taskRepository;
         }
 
-        public IGenericRepository<Tasks> TasksRepository { 
+        public ITasksRepository TasksRepository { 
                 get
                 {
                     return _taskRepository;
@@ -28,6 +28,26 @@ namespace DAL.Repositories
         public async Task Save()
         {
             await _context.SaveChangesAsync();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        void IDisposable.Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -6,10 +6,12 @@ import { Notification } from '../models/notification';
   providedIn: 'root',
 })
 export class NotificationsService {
-  baseUrl: string = 'http://localhost:5292/Notifications';
+  baseUrl: string = 'http://localhost:5292/Users';
   constructor(private http: HttpClient) {}
 
   getNotifications(userId: string): Observable<Notification[]> {
-    return this.http.get<Notification[]>(this.baseUrl + '/' + userId);
+    return this.http.get<Notification[]>(
+      this.baseUrl + '/' + userId + '/Notifications'
+    );
   }
 }

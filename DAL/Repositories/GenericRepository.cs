@@ -12,8 +12,8 @@ namespace DAL.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private readonly ApplicationContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly ApplicationContext _context;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public GenericRepository(ApplicationContext context) {
             _context = context;

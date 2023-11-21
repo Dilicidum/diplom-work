@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
         public Task Save();
 
-        public IGenericRepository<Tasks> TasksRepository { get; }
+        public ITasksRepository TasksRepository { get; }
     }
 }

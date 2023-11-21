@@ -24,7 +24,7 @@ namespace BLL.Services
         {
             if(task.TaskType == TaskType.SubTask)
             {
-                var baseTaskExists = await ValidateTaskExistence(task.BaseTaskId);
+                var baseTaskExists = await ValidateTaskExistence(task.BaseTaskId.Value);
 
                 if(!baseTaskExists)
                 {
@@ -73,9 +73,9 @@ namespace BLL.Services
             return tasks;
         }
 
-        public async Task<bool> ValidateTaskExistence(int? taskId)
+        public async Task<bool> ValidateTaskExistence(int taskId)
         {
-            var task = (await _unitOfWork.TasksRepository.Get(x=>x.Id == taskId)).FirstOrDefault();
+            var task = await _unitOfWork.TasksRepository.GetById(taskId);
             if(task != null)
             {
                 return true;
@@ -95,7 +95,7 @@ namespace BLL.Services
 
             if(task.TaskType == TaskType.Task)
             {
-                task.SubTasks = (await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.Id)).ToList();
+                task.SubTasks = (await _unitOfWork.TasksRepository.GetSubTasksForTask(taskId)).ToList();
             }
 
             return task;

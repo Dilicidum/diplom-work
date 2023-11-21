@@ -32,8 +32,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IJWTManager,JWTManager>();
 builder.Services.AddScoped<ITasksService,TasksService>();
+builder.Services.AddScoped<INotificationsService,NotificationsService>();
 builder.Services.AddScoped<IGenericRepository<Tasks>,GenericRepository<Tasks>>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<ITasksRepository,TasksRepository>();
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(

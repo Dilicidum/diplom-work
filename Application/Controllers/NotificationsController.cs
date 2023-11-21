@@ -7,32 +7,25 @@ using System.Security.Claims;
 
 namespace API.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     [Authorize]
     public class NotificationsController:ControllerBase
     {
-        private readonly ITasksService _taskService;
-        private readonly IMapper _mapper;
-        public NotificationsController(ITasksService tasksService,IMapper mapper) 
+        private readonly INotificationsService _notificationService;
+        public NotificationsController(INotificationsService notificationService) 
         {
-            _taskService = tasksService;
-            _mapper = mapper;
+            _notificationService = notificationService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("users/{userId}/notifications")]
         public async Task<IActionResult> GetNotifications(string userId)
         {
-            string userIdToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if(userIdToken != userId)
+            if(userId != User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
-                return BadRequest();
+                return Forbid();
             }
 
-            var tasks = (await _taskService.GetTasksForUser(userIdToken,x => x.DueDate == DateTime.Today));
-
-            var res = _mapper.Map<Notification[]>(tasks);
+            var res = await _notificationService.GetNotifications(userId);
 
             return Ok(res);
         }
