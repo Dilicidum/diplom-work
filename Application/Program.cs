@@ -75,6 +75,15 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanSeeUsers", policy =>
+        policy.RequireAssertion(context => 
+        context.User.IsInRole("Admin")));
+    options.AddPolicy("CanAddUsers", policy =>
+        policy.RequireAssertion(context => 
+        context.User.IsInRole("Admin")));
+});
 
 
 var app = builder.Build();

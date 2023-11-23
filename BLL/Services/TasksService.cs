@@ -61,18 +61,6 @@ namespace BLL.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId,Func<Tasks, bool>? filter = null)
-        {
-            var tasks = await _unitOfWork.TasksRepository.Get(x=>x.UserId == userId);
-
-            if(filter != null)
-            {
-                tasks = tasks.Where(filter);
-            }
-
-            return tasks;
-        }
-
         public async Task<bool> ValidateTaskExistence(int taskId)
         {
             var task = await _unitOfWork.TasksRepository.GetById(taskId);

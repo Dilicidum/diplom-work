@@ -49,7 +49,8 @@ namespace DAL.Repositories
             {
                 query = query.Where(filter);
             }
-
+            var x = query.ToList();
+            
             return await query.ToListAsync();
             
         }
@@ -67,6 +68,7 @@ namespace DAL.Repositories
         public async Task<IEnumerable<TEntity>> Find(Specification<TEntity> spec)
         {
             return (await _context.Set<TEntity>().ToListAsync()).Where(spec.IsSatisfiedBy);
+
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("[controller]")]
     public class UsersController: ControllerBase
@@ -22,7 +22,7 @@ namespace API.Controllers
             _roleManager = roleManager;
         }
 
-
+        [Authorize(Policy = "CanSeeUsers")]
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById(string userId)
         {
@@ -36,6 +36,7 @@ namespace API.Controllers
             return Ok(res);
         }
 
+        [Authorize(Policy = "CanSeeUsers")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -44,6 +45,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
+        [Authorize(Policy = "CanAddUsers")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserRegistrationModel user)
         {

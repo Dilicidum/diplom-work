@@ -31,7 +31,7 @@ namespace API.Controllers
         [HttpPost("users/{userId}/tasks")]
         public async Task<IActionResult> AddTask(string userId,TaskInputModel task)
         {
-            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier)  || User.IsInRole("Admin")))
+            if (!HasAccess(userId))
             {
                 return Forbid();
             }
@@ -40,13 +40,13 @@ namespace API.Controllers
             
             await _taskService.AddTask(taskToCreate);
 
-            return CreatedAtAction(nameof(GetTaskById),new {userId = task.UserId,taskId = taskToCreate.Id}, taskToCreate);
+            return CreatedAtAction(nameof(GetTaskById),new {userId = taskToCreate.UserId,taskId = taskToCreate.Id}, taskToCreate);
         }
 
         [HttpGet("users/{userId}/tasks")]
         public async Task<IActionResult> GetTasksWithFilter(string userId,[FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
         {
-            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier)  || User.IsInRole("Admin")))
+            if (!HasAccess(userId))
             {
                 return Forbid();
             }
@@ -72,7 +72,7 @@ namespace API.Controllers
         [HttpGet("users/{userId}/tasks/{taskId}")]
         public async Task<IActionResult> GetTaskById(string userId,int taskId)
         {
-            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            if (!HasAccess(userId))
             {
                 return Forbid();
             }
@@ -91,7 +91,7 @@ namespace API.Controllers
         [HttpDelete("users/{userId}/tasks/{taskId}")]
         public async Task<IActionResult> Delete(string userId,int taskId)
         {
-            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            if (!HasAccess(userId))
             {
                 return Forbid();
             }
@@ -111,7 +111,7 @@ namespace API.Controllers
         [HttpPut("users/{userId}/tasks/{taskId}")]
         public async Task<IActionResult> UpdateTask(string userId,int taskId,TaskInputModel model)
         {
-            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            if (!HasAccess(userId))
             {
                 return Forbid();
             }
@@ -128,6 +128,16 @@ namespace API.Controllers
             await _taskService.UpdateTask(task);
 
             return NoContent();
+        }
+
+        private bool HasAccess(string userId)
+        {
+            if(!(userId == User.FindFirstValue(ClaimTypes.NameIdentifier) || User.IsInRole("Admin")))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
