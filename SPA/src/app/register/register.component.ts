@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required]],
-      role: [''],
+      role: ['', [Validators.required]],
     });
   }
 
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
       password: this.registrationForm.value.password,
       role: this.registrationForm.value.role,
     } as UserRegistrationModel;
-
+    console.log('model = ', model);
     this.authService.register(model).subscribe({
       next: () => {
         this.registrationForm.reset();
