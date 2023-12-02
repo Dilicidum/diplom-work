@@ -76,7 +76,7 @@ namespace API.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return Ok();
+            return Ok("User was signed out");
         }
 
     }
