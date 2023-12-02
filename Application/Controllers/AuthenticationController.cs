@@ -29,11 +29,6 @@ namespace API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegistrationModel model)
         {   
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var user = _mapper.Map<IdentityUser>(model);
             var res = await _userManager.CreateAsync(user, model.Password);
 
@@ -57,11 +52,6 @@ namespace API.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserLoginModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var signedUser = await _userManager.FindByEmailAsync(model.Email);
 
             if(signedUser == null)
@@ -75,10 +65,18 @@ namespace API.Controllers
             {
                 return BadRequest("Login failed");
             }
-
+            
             var token = await _jwtManager.GenerateToken(signedUser);
 
             return Ok(new { token = token,userId = signedUser.Id});
+        }
+
+        [HttpPost("LogOut")]
+        [Authorize]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
         }
 
     }
