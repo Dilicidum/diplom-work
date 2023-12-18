@@ -14,23 +14,25 @@ namespace BLL.Services
     public class TasksService : ITasksService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITaskValidationService _taskValidationService;
 
-        public TasksService(IUnitOfWork unitOfWork)
+        public TasksService(IUnitOfWork unitOfWork,ITaskValidationService taskValidationService)
         {
             _unitOfWork = unitOfWork;
+            _taskValidationService = taskValidationService;
         }
 
         public async Task AddTask(Tasks task)
         {
             if(task.TaskType == TaskType.SubTask)
             {
-                var baseTaskExists = await ValidateTaskExistence(task.BaseTaskId.Value);
+                var baseTaskExists = await _taskValidationService.ValidateTaskExistence(task.BaseTaskId.Value);
 
                 if(!baseTaskExists)
                 {
                     return;
                 }
-            } 
+            }
 
             await _unitOfWork.TasksRepository.Add(task);
             await _unitOfWork.Save();
@@ -61,16 +63,6 @@ namespace BLL.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<bool> ValidateTaskExistence(int taskId)
-        {
-            var task = await _unitOfWork.TasksRepository.GetById(taskId);
-            if(task != null)
-            {
-                return true;
-            }    
-            return false;
-        }
-
         public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId, Specification<Tasks> specification)
         {
             var tasks = (await _unitOfWork.TasksRepository.Find(specification)).Where(x=>x.UserId == userId);
@@ -81,7 +73,7 @@ namespace BLL.Services
         {
             var task = (await _unitOfWork.TasksRepository.Get(x=>x.UserId == userId && x.Id == taskId)).FirstOrDefault();
 
-            if(task.TaskType == TaskType.Task)
+            if(task?.TaskType == TaskType.Task)
             {
                 task.SubTasks = (await _unitOfWork.TasksRepository.GetSubTasksForTask(taskId)).ToList();
             }

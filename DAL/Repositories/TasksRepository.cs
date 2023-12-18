@@ -15,9 +15,9 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<Tasks>> GetDueTasksForToday()
+        public async Task<IEnumerable<Tasks>> GetDueTasksForToday(string userId)
         {
-            var tasks = await _context.Tasks.Where(x=>x.DueDate == DateTime.Today).ToListAsync();
+            var tasks = await _context.Tasks.Where(x=>x.DueDate == DateTime.Today && x.UserId == userId).ToListAsync();
             return tasks;
         }
 

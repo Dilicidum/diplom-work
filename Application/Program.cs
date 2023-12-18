@@ -36,6 +36,7 @@ builder.Services.AddScoped<INotificationsService,NotificationsService>();
 builder.Services.AddScoped<IGenericRepository<Tasks>,GenericRepository<Tasks>>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped<ITasksRepository,TasksRepository>();
+builder.Services.AddScoped<ITaskValidationService,TaskValidationService>();
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
@@ -95,3 +96,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

@@ -21,8 +21,8 @@ namespace BLL.Services
 
         public async Task<IEnumerable<Notification>> GetNotifications(string userId)
         {
-            var tasks = (await _unitOfWork.TasksRepository.Get(x=>x.DueDate == DateTime.Today && x.UserId == userId));
-
+            var tasks = (await _unitOfWork.TasksRepository.GetDueTasksForToday(userId));
+            
             var notifications = _mapper.Map<Notification[]>(tasks);
 
             return notifications;
