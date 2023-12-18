@@ -24,7 +24,7 @@ namespace IntegrationTests.Controllers
         private CustomWebApplicationFactory<Program> _factory;
 
         [SetUp]
-        public async Task Setup()
+        public void Setup()
         {
             _factory = new CustomWebApplicationFactory<Program>();
             _client = _factory.CreateClient();
