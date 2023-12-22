@@ -51,5 +51,7 @@ export class RegisterComponent implements OnInit {
       },
     });
     this.router.navigate(['/login']);
+    this.registrationForm.reset();
+    this.registrationForm.disable();
   }
 }
