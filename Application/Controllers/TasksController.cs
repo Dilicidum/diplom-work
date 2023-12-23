@@ -1,6 +1,4 @@
-﻿using BLL.Interfaces;
-using DAL.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using API.Interfaces;
 using API.Models;
@@ -9,7 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using DAL.Specifications;
+using Services.Abstractions.Interfaces;
+using Domain.Entities;
+using Domain.Specifications;
+using TaskStatus = Domain.Entities.TaskStatus;
 
 namespace API.Controllers
 {
@@ -44,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpGet("users/{userId}/tasks")]
-        public async Task<IActionResult> GetTasksWithFilter(string userId,[FromQuery]TaskType taskType,[FromQuery]DAL.Models.TaskStatus? status, [FromQuery] TaskCategory? category )
+        public async Task<IActionResult> GetTasksWithFilter(string userId,[FromQuery]TaskType taskType,[FromQuery]TaskStatus? status, [FromQuery] TaskCategory? category )
         {
             if (!HasAccess(userId))
             {

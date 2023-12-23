@@ -8,12 +8,16 @@ using NUnit.Framework;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
-using DAL;
-using DAL.Models;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
+using Service.Services;
+using Services.Abstractions.Interfaces;
 using System.Text.Json;
 using IntegrationTests.Repositories;
 using IntegrationTests.Helpers;
-using BLL.Models;
+using Services.Abstractions.DTO;
 
 namespace IntegrationTests.Controllers
 {

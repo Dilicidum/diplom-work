@@ -1,5 +1,9 @@
-﻿using DAL;
-using DAL.Models;
+﻿using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
+using Service.Services;
+using Services.Abstractions.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace IntegrationTests.Helpers
 {
@@ -51,11 +56,11 @@ namespace IntegrationTests.Helpers
         {
             return new List<Tasks>()
             {
-                new Tasks { Id = 1,DueDate = DateTime.Today, UserId = testUserId, Name = "1", Description = "3", BaseTaskId = null,TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.None, Category = TaskCategory.Fitness },
+                new Tasks { Id = 1,DueDate = DateTime.Today, UserId = testUserId, Name = "1", Description = "3", BaseTaskId = null,TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.None, Category = TaskCategory.Fitness },
                 new Tasks { Id = 2,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "2", Description = "3", TaskType = TaskType.SubTask, BaseTaskId = 1 },
                 new Tasks { Id = 3,DueDate = DateTime.Today, UserId = wrongUserId, Name = testUserId, Description = "3", TaskType = TaskType.Task },
-                new Tasks { Id = 4,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "4", Description = "4", TaskType = TaskType.Task, BaseTaskId = null, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work },
-                new Tasks { Id = 5,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "5", Description = "5", TaskType = TaskType.Task, BaseTaskId = null, Status = DAL.Models.TaskStatus.Progress, Category = TaskCategory.Fitness },
+                new Tasks { Id = 4,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "4", Description = "4", TaskType = TaskType.Task, BaseTaskId = null, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work },
+                new Tasks { Id = 5,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "5", Description = "5", TaskType = TaskType.Task, BaseTaskId = null, Status = Domain.Entities.TaskStatus.Progress, Category = TaskCategory.Fitness },
             };
         }
     }

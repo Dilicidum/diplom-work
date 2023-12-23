@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using BLL.Interfaces;
-using BLL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Abstractions.Interfaces;
 using System.Security.Claims;
 
 namespace API.Controllers

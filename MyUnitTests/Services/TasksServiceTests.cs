@@ -1,12 +1,13 @@
 ﻿using AutoFixture.NUnit3;
 using AutoMapper;
-using BLL.Interfaces;
-using BLL.Services;
-using DAL.Interfaces;
-using DAL.Models;
-using DAL.Specifications;
+using Domain.Entities;
+using Domain.Interfaces;
+using Domain.Specifications;
+using Service.Services;
+using Services.Abstractions.Interfaces;
 using Moq;
 using NUnit.Framework;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -160,7 +161,7 @@ namespace UnitTests.Services
         [TestCase("testUserId")]
         [Test]
         public async Task GetTasksForUser_TaskTypeTaskAndTaskStatusDone_ReturnsAllBaseTasksForUserWithTaskStatusDone
-            (string userId,TaskType taskType = TaskType.Task,DAL.Models.TaskStatus status = DAL.Models.TaskStatus.Done)
+            (string userId,TaskType taskType = TaskType.Task,Domain.Entities.TaskStatus status = Domain.Entities.TaskStatus.Done)
         {
             // Arrange
             var tasks = GetTasks();            
@@ -179,7 +180,7 @@ namespace UnitTests.Services
         [TestCase("testUserId")]
         [Test]
         public async Task GetTasksForUser_TaskTypeTaskAndTaskStatusDoneAndTaskCategoryWork_ReturnsAllBaseTasksForUserWithTaskStatusDoneAndCategoryWork
-            (string userId,TaskType taskType = TaskType.Task,DAL.Models.TaskStatus status = DAL.Models.TaskStatus.Done,TaskCategory category = TaskCategory.Work)
+            (string userId,TaskType taskType = TaskType.Task,Domain.Entities.TaskStatus status = Domain.Entities.TaskStatus.Done,TaskCategory category = TaskCategory.Work)
         {
             // Arrange
             var tasks = GetTasks();
@@ -239,12 +240,12 @@ namespace UnitTests.Services
         {
             return new List<Tasks>
             {
-                new Tasks { Id = 1, UserId = "A",TaskType = TaskType.Task,Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 2, UserId = "B", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 3, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work, BaseTaskId = 2},
-                new Tasks { Id = 4, UserId = "A", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work},
-                new Tasks { Id = 5, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
-                new Tasks { Id = 6, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
+                new Tasks { Id = 1, UserId = "testUserId",TaskType = TaskType.Task,Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
+                new Tasks { Id = 2, UserId = "wrongUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
+                new Tasks { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work, BaseTaskId = 2},
+                new Tasks { Id = 4, UserId = "testUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
+                new Tasks { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
+                new Tasks { Id = 6, UserId = "wrongUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
             };
         }
     }

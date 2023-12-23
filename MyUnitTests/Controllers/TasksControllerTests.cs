@@ -1,9 +1,8 @@
 ﻿using API.Controllers;
 using API.Models;
 using AutoMapper;
-using BLL.Interfaces;
-using DAL.Models;
-using DAL.Specifications;
+using Domain.Entities;
+using Domain.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using Services.Abstractions.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -48,7 +48,7 @@ namespace UnitTests.Controllers
 
             _controller = new TasksController(_taskService.Object, _mapper.Object, _userManager.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-                new Claim(ClaimTypes.NameIdentifier, "A"),
+                new Claim(ClaimTypes.NameIdentifier, "testUserId"),
             }));
             _controller.ControllerContext = new ControllerContext {
                 HttpContext = new DefaultHttpContext { User = user }
@@ -61,10 +61,10 @@ namespace UnitTests.Controllers
         {
             // Arrange
             var inputTask = new TaskInputModel(){
-                TaskType = TaskType.Task,
+                TaskType = Domain.Entities.TaskType.Task,
                 BaseTaskId = null,
-                Category = TaskCategory.Work,
-                Status = DAL.Models.TaskStatus.None,
+                Category = Domain.Entities.TaskCategory.Work,
+                Status = Domain.Entities.TaskStatus.None,
                 Name = "TaskName",
                 Description = "TaskDescription",
                 DueDate = DateTime.Today.AddDays(1),
@@ -75,7 +75,7 @@ namespace UnitTests.Controllers
                 TaskType = TaskType.Task,
                 BaseTaskId = null,
                 Category = TaskCategory.Work,
-                Status = DAL.Models.TaskStatus.None,
+                Status = Domain.Entities.TaskStatus.None,
                 Name = "TaskName",
                 Description = "TaskDescription",
                 DueDate = DateTime.Today.AddDays(1),
@@ -119,7 +119,7 @@ namespace UnitTests.Controllers
                 .ReturnsAsync(taskList);
 
             // Act
-            var result = await _controller.GetTasksWithFilter(userId, TaskType.Task, DAL.Models.TaskStatus.Done, TaskCategory.Fitness);
+            var result = await _controller.GetTasksWithFilter(userId, Domain.Entities.TaskType.Task, Domain.Entities.TaskStatus.Done, Domain.Entities.TaskCategory.Fitness);
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
@@ -133,7 +133,7 @@ namespace UnitTests.Controllers
         public async Task GetTasksWithFilter_UserDoesNotHaveAccess_ReturnsForbid(string userId)
         {
             // Act
-            var result = await _controller.GetTasksWithFilter(userId, TaskType.Task, null, null);
+            var result = await _controller.GetTasksWithFilter(userId, Domain.Entities.TaskType.Task, null, null);
 
             // Assert
             Assert.IsInstanceOf<ForbidResult>(result);
@@ -188,7 +188,7 @@ namespace UnitTests.Controllers
         }
 
         [Test]
-        [TestCase("B")]
+        [TestCase("wrongUserId")]
         public async Task UpdateTask_UserDoesNotHaveAccess_ReturnsForbid(string userId)
         {
             // Arrange
@@ -219,7 +219,7 @@ namespace UnitTests.Controllers
         }
 
         [Test]
-        [TestCase("A")]
+        [TestCase("testUserId")]
         public async Task UpdateTask_TaskIsUpdated_ReturnsNoContent(string userId)
         {
             // Arrange

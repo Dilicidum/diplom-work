@@ -1,7 +1,4 @@
-﻿using BLL.Services;
-using DAL.Interfaces;
-using DAL.Models;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,6 +6,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Service.Services;
+using Services.Abstractions.Interfaces;
+using AutoMapper;
+using System.Diagnostics.CodeAnalysis;
+using Services.Services;
+using Services.Abstractions.DTO;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
 
 namespace UnitTests.Services
 {

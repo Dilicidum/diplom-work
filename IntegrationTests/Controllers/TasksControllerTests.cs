@@ -1,5 +1,4 @@
 ﻿using API.Models;
-using DAL.Models;
 using System.Text.Json;
 using NUnit.Framework;
 using System;
@@ -10,7 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using IntegrationTests.Helpers;
-using DAL;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
+using Service.Services;
+using Services.Abstractions.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
@@ -46,12 +50,12 @@ namespace IntegrationTests.Controllers
             {
                 UserId = userId,
                 BaseTaskId = null,
-                Status = DAL.Models.TaskStatus.Done,
-                Category = TaskCategory.University,
+                Status = Domain.Entities.TaskStatus.Done,
+                Category = Domain.Entities.TaskCategory.University,
                 Description = "description",
                 Name = "task name",
                 DueDate = new DateTime(),
-                TaskType = TaskType.Task,
+                TaskType = Domain.Entities.TaskType.Task,
             };
 
             // Act
@@ -329,12 +333,12 @@ namespace IntegrationTests.Controllers
             {
                 UserId = Utilities.testUserId,
                 BaseTaskId = null,
-                Status = DAL.Models.TaskStatus.Done,
-                Category = TaskCategory.University,
+                Status = Domain.Entities.TaskStatus.Done,
+                Category = Domain.Entities.TaskCategory.University,
                 Description = "description",
                 Name = "task name",
                 DueDate = new DateTime(),
-                TaskType = TaskType.Task,
+                TaskType = Domain.Entities.TaskType.Task,
             };
     }
 }

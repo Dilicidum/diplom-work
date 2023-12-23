@@ -1,6 +1,6 @@
 ﻿using API.Controllers;
-using BLL.Interfaces;
-using BLL.Models;
+using Services.Abstractions.Interfaces;
+using Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Services.Abstractions.DTO;
 
 namespace UnitTests.Controllers
 {

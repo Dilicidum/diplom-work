@@ -1,5 +1,13 @@
-﻿using DAL;
-using DAL.Interfaces;
+﻿using Service.Services;
+using Services.Abstractions.Interfaces;
+using AutoMapper;
+using System.Diagnostics.CodeAnalysis;
+using Services.Services;
+using Services.Abstractions.DTO;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
@@ -9,11 +17,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
-using DAL.Models;
-using DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Runtime.Intrinsics.X86;
+using Infrastructure.Repositories;
 
 namespace IntegrationTests.Repositories
 {

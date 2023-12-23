@@ -1,12 +1,7 @@
 
 using API.Interfaces;
 using API.Security;
-using BLL.Interfaces;
-using BLL.Services;
-using DAL;
-using DAL.Interfaces;
-using DAL.Models;
-using DAL.Repositories;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +11,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Domain.Interfaces;
+using Domain.Entities;
+using Infrastructure.Repositories;
+using Services.Abstractions.Interfaces;
+using Services.Services;
+using Service.Services;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

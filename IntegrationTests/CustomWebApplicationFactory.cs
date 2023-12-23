@@ -11,7 +11,16 @@
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Hosting;
-    using DAL;
+    using Service.Services;
+using Services.Abstractions.Interfaces;
+using AutoMapper;
+using System.Diagnostics.CodeAnalysis;
+using Services.Services;
+using Services.Abstractions.DTO;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
     using Microsoft.Data.Sqlite;
     using System.Data.Common;
 

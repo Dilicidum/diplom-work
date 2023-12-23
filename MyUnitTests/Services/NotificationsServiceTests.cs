@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using DAL.Interfaces;
-using DAL.Models;
-using BLL.Services;
+using Service.Services;
+using Services.Abstractions.Interfaces;
 using AutoMapper;
-using BLL.Models;
 using System.Diagnostics.CodeAnalysis;
+using Services.Services;
+using Services.Abstractions.DTO;
+using Domain.Entities;
+using Infrastructure;
+using Domain.Interfaces;
+using Domain.Specifications;
 
 namespace UnitTests.Services
 {
