@@ -3,7 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Services.Abstractions.DTO;
 
-namespace API.Models
+namespace Services.Abstractions.DTO
 {
     public class MapperProfile : Profile
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace API.Models
+namespace Services.Abstractions.DTO
 {
     public class TaskInputModel
     {

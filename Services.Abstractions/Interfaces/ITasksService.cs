@@ -16,7 +16,7 @@ namespace Services.Abstractions.Interfaces
 
         public Task UpdateTask(Tasks task);
 
-        public Task<IEnumerable<Tasks>> GetTasksForUser(string userId, Specification<Tasks> specification);
+        public Task<IEnumerable<Tasks>> GetTasksForUser(TasksByTypeAndStatusAndCategorySpecAndUserId spec);
 
         public Task<Tasks> GetTaskById(string userId,int taskId);
     }

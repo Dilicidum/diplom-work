@@ -33,7 +33,7 @@ namespace Service.Services
                 }
             }
 
-            await _unitOfWork.TasksRepository.Add(task);
+            await _unitOfWork.TasksRepository.AddAsync(task);
             await _unitOfWork.Save();
         }
 
@@ -41,41 +41,39 @@ namespace Service.Services
         {
             if(task.TaskType == TaskType.Task)
             {
-                var subTasks = await _unitOfWork.TasksRepository.Get(x=>x.BaseTaskId == task.Id);
+                var spec = new SubTasksByBaseTaskIdSpec(task.Id);
+                var subTasks = await _unitOfWork.TasksRepository.ListAsync(spec);
 
                 if (subTasks.Any())
                 {
                     foreach (var subTask in subTasks)
                     {
-                        _unitOfWork.TasksRepository.Delete(subTask);
+                        await _unitOfWork.TasksRepository.DeleteAsync(subTask);
                     }
                 }
             }
 
-            _unitOfWork.TasksRepository.Delete(task);
+            await _unitOfWork.TasksRepository.DeleteAsync(task);
             await _unitOfWork.Save();
         }
 
         public async Task UpdateTask(Tasks task)
         {
-            _unitOfWork.TasksRepository.Update(task);
+            await _unitOfWork.TasksRepository.UpdateAsync(task);
             await _unitOfWork.Save();
         }
 
-        public async Task<IEnumerable<Tasks>> GetTasksForUser(string userId, Specification<Tasks> specification)
+        public async Task<IEnumerable<Tasks>> GetTasksForUser(TasksByTypeAndStatusAndCategorySpecAndUserId spec)
         {
-            var tasks = (await _unitOfWork.TasksRepository.Find(specification)).Where(x=>x.UserId == userId);
+            var tasks = await _unitOfWork.TasksRepository.ListAsync(spec);
             return tasks;
         }
 
         public async Task<Tasks> GetTaskById(string userId,int taskId)
         {
-            var task = (await _unitOfWork.TasksRepository.Get(x=>x.UserId == userId && x.Id == taskId)).FirstOrDefault();
 
-            if(task?.TaskType == TaskType.Task)
-            {
-                task.SubTasks = (await _unitOfWork.TasksRepository.GetSubTasksForTask(taskId)).ToList();
-            }
+            var UserIdAndTaskIdSpec = new TaskByUserIdAndTaskIdSpec(userId,taskId);
+            var task = await _unitOfWork.TasksRepository.FirstOrDefaultAsync(UserIdAndTaskIdSpec);
 
             return task;
         }

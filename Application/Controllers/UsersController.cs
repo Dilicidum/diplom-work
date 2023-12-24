@@ -1,4 +1,4 @@
-﻿using API.Models;
+﻿using Services.Abstractions.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

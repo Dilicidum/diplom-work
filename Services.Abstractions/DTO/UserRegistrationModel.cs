@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Primitives;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Models
+namespace Services.Abstractions.DTO
 {
     public class UserRegistrationModel
     {

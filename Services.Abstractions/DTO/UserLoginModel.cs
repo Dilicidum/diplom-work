@@ -1,4 +1,4 @@
-﻿namespace API.Models
+﻿namespace Services.Abstractions.DTO
 {
     public class UserLoginModel
     {

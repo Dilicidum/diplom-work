@@ -19,7 +19,7 @@ namespace Services.Services
 
         public async Task<bool> ValidateTaskExistence(int taskId)
         {
-            var task = await _unitOfWork.TasksRepository.GetById(taskId);
+            var task = await _unitOfWork.TasksRepository.GetByIdAsync(taskId);
             if(task != null)
             {
                 return true;

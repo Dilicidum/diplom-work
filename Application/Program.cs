@@ -18,10 +18,12 @@ using Services.Abstractions.Interfaces;
 using Services.Services;
 using Service.Services;
 using Infrastructure;
+using Services.Abstractions.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -31,11 +33,11 @@ builder.Services.AddControllers()
         });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 builder.Services.AddScoped<IJWTManager,JWTManager>();
 builder.Services.AddScoped<ITasksService,TasksService>();
 builder.Services.AddScoped<INotificationsService,NotificationsService>();
-builder.Services.AddScoped<IGenericRepository<Tasks>,GenericRepository<Tasks>>();
+
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped<ITasksRepository,TasksRepository>();
 builder.Services.AddScoped<ITaskValidationService,TaskValidationService>();
@@ -57,6 +59,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
             options.SignIn.RequireConfirmedAccount = false;
         }).AddEntityFrameworkStores<ApplicationContext>();
+
+
 
 
 builder.Services.AddAuthentication(options =>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Interfaces;
+using Domain.Specifications;
 using Services.Abstractions.DTO;
 using Services.Abstractions.Interfaces;
 using System;
@@ -21,7 +22,8 @@ namespace Services.Services
 
         public async Task<IEnumerable<Notification>> GetNotifications(string userId)
         {
-            var tasks = (await _unitOfWork.TasksRepository.GetDueTasksForToday(userId));
+            var spec = new TasksByUserIdAndDateSpec(userId,DateTime.Now);
+            var tasks = await _unitOfWork.TasksRepository.ListAsync(spec);
             
             var notifications = _mapper.Map<Notification[]>(tasks);
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using API.Interfaces;
-using API.Models;
+using Services.Abstractions.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -52,20 +52,9 @@ namespace API.Controllers
                 return Forbid();
             }
 
-            TaskTypeSpecification taskTypeSpecification = new TaskTypeSpecification(taskType);
-            Specification<Tasks> specification = taskTypeSpecification;
-            
-            if(status.HasValue)
-            {
-                specification = specification.AndSpecification(new StatusSpecification(status.Value));
-            }
+            var spec = new TasksByTypeAndStatusAndCategorySpecAndUserId(userId,taskType,category,status);
 
-            if(category.HasValue)
-            {
-                specification = specification.AndSpecification(new TaskCategorySpecification(category.Value));
-            }
-
-            var filteredTasks = await _taskService.GetTasksForUser(userId, specification);
+            var filteredTasks = await _taskService.GetTasksForUser(spec);
 
             return Ok(filteredTasks);
         }
