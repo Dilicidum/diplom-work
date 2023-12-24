@@ -25,6 +25,7 @@ namespace UnitTests.Controllers
         private Mock<RoleManager<IdentityRole>> _roleManager;
         private Mock<IMapper> _mapperMock;
         private UsersController _controller;
+        private Mock<SignInManager<IdentityUser>> _signInManager;
 
         [SetUp]
         public void Setup()

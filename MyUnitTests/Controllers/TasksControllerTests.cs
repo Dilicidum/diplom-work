@@ -48,7 +48,7 @@ namespace UnitTests.Controllers
 
             _controller = new TasksController(_taskService.Object, _mapper.Object, _userManager.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
-                new Claim(ClaimTypes.NameIdentifier, "A"),
+                new Claim(ClaimTypes.NameIdentifier, "testUserId"),
             }));
             _controller.ControllerContext = new ControllerContext {
                 HttpContext = new DefaultHttpContext { User = user }
@@ -188,7 +188,7 @@ namespace UnitTests.Controllers
         }
 
         [Test]
-        [TestCase("B")]
+        [TestCase("wrongUserId")]
         public async Task UpdateTask_UserDoesNotHaveAccess_ReturnsForbid(string userId)
         {
             // Arrange
@@ -219,7 +219,7 @@ namespace UnitTests.Controllers
         }
 
         [Test]
-        [TestCase("A")]
+        [TestCase("testUserId")]
         public async Task UpdateTask_TaskIsUpdated_ReturnsNoContent(string userId)
         {
             // Arrange

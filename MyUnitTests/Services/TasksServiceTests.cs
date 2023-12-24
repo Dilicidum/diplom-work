@@ -239,12 +239,12 @@ namespace UnitTests.Services
         {
             return new List<Tasks>
             {
-                new Tasks { Id = 1, UserId = "A",TaskType = TaskType.Task,Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 2, UserId = "B", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 3, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work, BaseTaskId = 2},
-                new Tasks { Id = 4, UserId = "A", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work},
-                new Tasks { Id = 5, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
-                new Tasks { Id = 6, UserId = "A", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
+                new Tasks { Id = 1, UserId = "testUserId",TaskType = TaskType.Task,Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
+                new Tasks { Id = 2, UserId = "wrongUserId", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work},
+                new Tasks { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Done, Category = TaskCategory.Work, BaseTaskId = 2},
+                new Tasks { Id = 4, UserId = "testUserId", TaskType = TaskType.Task, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work},
+                new Tasks { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
+                new Tasks { Id = 6, UserId = "testUserId", TaskType = TaskType.SubTask, Status = DAL.Models.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
             };
         }
     }
