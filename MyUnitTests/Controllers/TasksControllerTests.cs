@@ -1,5 +1,5 @@
 ﻿using API.Controllers;
-using API.Models;
+using Services.Abstractions.DTO;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Specifications;
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Ardalis.Specification;
 
 namespace UnitTests.Controllers
 {
@@ -115,7 +116,7 @@ namespace UnitTests.Controllers
         {
             // Arrange
             var taskList = new List<Tasks>();
-            _taskService.Setup(x => x.GetTasksForUser(It.IsAny<string>(), It.IsAny<Specification<Tasks>>()))
+            _taskService.Setup(x => x.GetTasksForUser(It.IsAny<TasksByTypeAndStatusAndCategorySpecAndUserId>()))
                 .ReturnsAsync(taskList);
 
             // Act

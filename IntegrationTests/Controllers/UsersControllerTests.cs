@@ -18,7 +18,6 @@ using Domain.Interfaces;
 using Domain.Specifications;
 using IntegrationTests.Helpers;
 using Microsoft.Extensions.DependencyInjection;
-using API.Models;
 using System.Net;
 
 namespace IntegrationTests.Controllers

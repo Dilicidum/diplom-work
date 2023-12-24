@@ -15,7 +15,6 @@ using Domain.Specifications;
 using Service.Services;
 using Services.Abstractions.Interfaces;
 using System.Text.Json;
-using IntegrationTests.Repositories;
 using IntegrationTests.Helpers;
 using Services.Abstractions.DTO;
 

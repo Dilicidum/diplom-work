@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ITasksRepository: IReadRepositoryBase<Tasks>,IRepositoryBase<Tasks>
+    public interface ITasksRepository : IReadRepositoryBase<Tasks>, IRepositoryBase<Tasks>
     {
 
     }

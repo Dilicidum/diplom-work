@@ -37,7 +37,6 @@ builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 builder.Services.AddScoped<IJWTManager,JWTManager>();
 builder.Services.AddScoped<ITasksService,TasksService>();
 builder.Services.AddScoped<INotificationsService,NotificationsService>();
-
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped<ITasksRepository,TasksRepository>();
 builder.Services.AddScoped<ITaskValidationService,TaskValidationService>();

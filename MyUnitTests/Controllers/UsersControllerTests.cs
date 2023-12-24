@@ -1,5 +1,5 @@
 ﻿using API.Controllers;
-using API.Models;
+using Services.Abstractions.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

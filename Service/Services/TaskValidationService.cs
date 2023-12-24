@@ -1,10 +1,10 @@
-﻿using Domain.Interfaces;
-using Services.Abstractions.Interfaces;
+﻿using Services.Abstractions.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Interfaces;
 
 namespace Services.Services
 {
