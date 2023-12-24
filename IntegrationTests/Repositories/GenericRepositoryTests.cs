@@ -22,7 +22,7 @@ namespace IntegrationTests.Repositories
         private IGenericRepository<Tasks> _tasksRepository;
 
         [SetUp]
-        public async Task Setup()
+        public override async Task SetUp()
         {
             await base.SetUp();
             await base.CreateUsers();

@@ -23,6 +23,11 @@ namespace IntegrationTests.Repositories
         protected UserManager<IdentityUser> _userManager;
         protected ApplicationContext _context;
 
+        public BaseRepository()
+        {
+
+        }
+
         protected string user1Id { get
             {
                 return "user1Id";

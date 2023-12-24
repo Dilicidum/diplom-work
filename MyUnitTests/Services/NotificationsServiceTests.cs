@@ -66,7 +66,7 @@ namespace UnitTests.Services
                     Id = 2,
                     Description = "Desc2",
                     Name= "Test2",
-                    DueDate = DateTime.Today.AddDays(1),
+                    DueDate = DateTime.Today,
                     UserId = userId
                 }}));
 
