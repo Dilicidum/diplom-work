@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     if (this.registrationForm.invalid) {
       console.log('Invalid form');
-      return;
     }
 
     let model = {

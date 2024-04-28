@@ -38,10 +38,15 @@ namespace API.Controllers
             }
 
             var taskToCreate = _mapper.Map<Tasks>(task);
-            
+            var i = 0;
+            taskToCreate.Criterias.ForEach(x =>
+            {
+                x.Order = i;
+                i++;
+            });
             await _taskService.AddTask(taskToCreate);
 
-            return CreatedAtAction(nameof(GetTaskById),new {userId = taskToCreate.UserId,taskId = taskToCreate.Id}, taskToCreate);
+            return Ok();
         }
 
         [HttpGet("users/{userId}/tasks")]

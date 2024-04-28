@@ -7,21 +7,21 @@
   </div>
   <div class="d-flex flex-column"  style="margin-left: 10vh;">
     <div class="p-2">
-      <button routerLink="/create-task" [queryParams]="{ type: 'SubTask', 'baseTaskId': task.id }"  class="btn btn-primary text-dark">Create Sub task</button>
+      <button routerLink="/candidates/create" [queryParams]="{ type: 'SubTask', 'baseTaskId': task.id }"  class="btn btn-primary text-dark">Створити кандидата</button>
     </div>
 
     <div class="p-2">
-      <div *ngIf="task.subTasks && task.subTasks.length > 0">
-        <label style="margin-left: 20px;">Sub tasks</label>
-        <div class="d-flex flex-column" *ngFor="let subTask of task.subTasks" style="margin-bottom: 5vh;">
-          <app-task-card (deleteEvent)="refreshPage()" [task]="subTask" [isDetailed]="true"></app-task-card>
+      <div>
+        <label style="margin-left: 20px;">Кандидати</label>
+        <div class="d-flex flex-column" *ngFor="let subTask of candidates$ | async" style="margin-bottom: 5vh;">
+          <app-candidate-card (deleteEvent)="refreshPage()" [task]="subTask" [userId]="userId" [isDetailed]="true"></app-candidate-card>
         </div>
       </div>
     </div>
 
     <div class="p-2">
       <div *ngIf="(task.subTasks && task.subTasks.length == 0) || task.subTasks == null">
-        <label style="margin-left: 20px;">No sub tasks</label>
+        <label style="margin-left: 20px;">Кандидати відсутні</label>
       </div>
     </div>
 </div>

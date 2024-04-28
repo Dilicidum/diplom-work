@@ -29,6 +29,9 @@ namespace Domain.Entities
 
         public IdentityUser User { get; set; }
 
+        public List<Criteria> Criterias { get; set; }
+
+        public List<Candidate> Candidates { get; set; }
     }
 
     public enum TaskType

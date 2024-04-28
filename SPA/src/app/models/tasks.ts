@@ -1,3 +1,5 @@
+import { Criteria } from './criteria';
+
 export interface Tasks {
   id: number;
   name: string;
@@ -9,6 +11,7 @@ export interface Tasks {
   userId: string;
   dueDate: Date;
   subTasks: Tasks[];
+  criterias: Criteria[];
 }
 
 export enum TaskCategory {

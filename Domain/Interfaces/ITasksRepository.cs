@@ -10,6 +10,6 @@ namespace Domain.Interfaces
 {
     public interface ITasksRepository : IReadRepositoryBase<Tasks>, IRepositoryBase<Tasks>
     {
-
+        public Task<Tasks> GetTaskByIdWithIncluded(int taskId);
     }
 }

@@ -20,6 +20,10 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-
+        public async Task<Tasks> GetTaskByIdWithIncluded(int taskId)
+        {
+            var result = (await _context.Tasks.Include(x=>x.Candidates).Include(x=>x.Criterias).FirstOrDefaultAsync(x=>x.Id == taskId));
+            return result;
+        } 
     }
 }

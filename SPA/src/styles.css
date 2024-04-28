@@ -42,3 +42,7 @@ html, body {
   justify-content: center;
   align-items: center;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import '@angular/material/prebuilt-themes/indigo-pink.css';

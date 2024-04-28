@@ -17,6 +17,15 @@ import { TaskInfoComponent } from './task-info/task-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
+import { UploadComponent } from './upload/upload.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PopupFormComponent } from './popup-form/popup-form.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CreateCandidateFormComponent } from './create-candidate-form/create-candidate-form.component';
+import { CandidateCardComponent } from './candidate-card/candidate-card.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -29,6 +38,16 @@ const routes: Routes = [
   {
     path: 'tasks',
     component: TasksComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'upload/:id',
+    component: UploadComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'candidates/create',
+    component: CreateCandidateFormComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -56,8 +75,16 @@ const routes: Routes = [
     TaskInfoComponent,
     NotificationsComponent,
     NotificationItemComponent,
+    UploadComponent,
+    PopupFormComponent,
+    CreateCandidateFormComponent,
+    CandidateCardComponent,
   ],
   imports: [
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgxChartsModule,
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
@@ -69,6 +96,7 @@ const routes: Routes = [
         allowedDomains: ['http://localhost:5292'],
       },
     }),
+    BrowserAnimationsModule,
   ],
   providers: [
     {

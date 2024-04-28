@@ -19,6 +19,7 @@ using Services.Services;
 using Service.Services;
 using Infrastructure;
 using Services.Abstractions.DTO;
+using Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,12 @@ builder.Services.AddScoped<INotificationsService,NotificationsService>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped<ITasksRepository,TasksRepository>();
 builder.Services.AddScoped<ITaskValidationService,TaskValidationService>();
-
+builder.Services.AddScoped<IVikorService,VikorService>();
+builder.Services.AddScoped<ICriteriasRepository,CriteriasRepository>();
+builder.Services.AddScoped<ICriteriasService,CriteriasService>();
+builder.Services.AddScoped<ICandidatesService,CandidatesService>();
+builder.Services.AddScoped<ICandidatesRepository,CandidatesRepository>();
+builder.Services.AddScoped<IVikorService,VikorService>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         builder =>

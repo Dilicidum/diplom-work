@@ -1,5 +1,6 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="container-fluid h-100 d-flex justify-content-center align-items-center flex-column">
   <div class="form">
+
     <div class="d-flex flex-row justify-content-between">
       <div class="p-2 form-group">
         <label for="status">Status</label>
@@ -62,6 +63,9 @@
     <div class="d-flex" *ngIf="isDetailed==false">
       <div class="p-2 form-group">
         <button class="btn btn-primary text-dark" [routerLink]="['/tasks',task.id,task.userId]">More detailed info</button>
+      </div>
+      <div class="p-2 form-group">
+        <button class="btn btn-primary text-dark" [routerLink]="['/upload',task.id]">Аналіз</button>
       </div>
     </div>
   </div>

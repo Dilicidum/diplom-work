@@ -15,6 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   login(data: UserLoginModel) {
+    console.log('here');
     return this.http.post(this.loginUrl, data).pipe(
       tap((res: any) => {
         localStorage.setItem('token', res.token);

@@ -1,0 +1,255 @@
+<div class="d-flex flex-column">
+<div class="d-flex flex-column">
+  <h3>Загрузіть файл з оцінками\критеріями кандидатів для отримання найкращих варіантів</h3>
+  <div class="row mb-2">
+    <div class="col-sm-12 col-md-8"><strong> Формат файлу: </strong> Матриця, елементи якої відділяються один від одного по стовпичках через пробіл</div>
+    <div class="col-sm-12 col-md-8"><strong>Матриця</strong> не має містити нічого іншого крім оцінок критеріїв</div>
+  </div>
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" style="width: 18rem;">
+    <div class="mb-3 ">
+      <label for="file" class="form-label"><strong>Загрузіть файл</strong></label>
+      <input type="file" class="form-control" id="file" (change)="onFileSelect($event)">
+    </div>
+    <div class="mb-3">
+      <label for="method">Оберіть метод підбору найкращого варіанту:</label>
+      <select formControlName="methodName" class="form-control" id="method">
+        <option ngValue="Vikor">Vikor</option>
+        <option ngValue="Topsis">Topsis</option>
+      </select>
+    </div>
+    <div class="mb-3" formArrayName="criterias">
+      <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i">
+        <label>Критерій {{i+1}}</label>
+        <input type="text" class="form-control" formControlName="value">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <div  *ngIf="showResult$.value">
+  <div *ngIf="methodName=='Vikor'">
+  <div>
+    <div class="mb-3 mt-3"><strong>Результат:</strong></div>
+    <div>
+      <strong>Найкращі варіанти працівників:</strong>
+    </div>
+    <ul *ngIf="methodName=='Vikor'">
+      <li *ngFor="let number of (AssesmentData$ | async).bestAlternatives">{{ number }}</li>
+    </ul>
+
+  </div>
+  <div>
+    <div>
+      <strong>Пріоритетність працівників за критеріями:</strong>
+    </div>
+    <table class="table" *ngIf="methodName=='Vikor'">
+      <thead>
+        <tr>
+          <th scope="col">Ранг за Q</th>
+          <th scope="col">Q</th>
+          <th scope="col">Ранг за S</th>
+          <th scope="col">Ранг за R</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of (mergedData$ | async)">
+          <td>{{item.key}}</td>
+          <td>{{item.value}}</td>
+          <td>{{item.value_S}}</td>
+          <td>{{item.value_R}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h1>Графіки:</h1>
+  <div *ngIf="methodName=='Vikor'" id="VIKOR">
+    <div >
+      <h6>Графіки Q,S,R:</h6>
+    <div id="graphs" class="d-flex">
+
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="data"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel_Q"
+        [yAxisLabel]="yAxisLabel_Q"
+        (select)="onSelect($event)">
+      </ngx-charts-bar-vertical >
+      <ngx-charts-bar-vertical [view]="view"
+        [scheme]="colorScheme"
+        [results]="data_S"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel_S"
+        [yAxisLabel]="yAxisLabel_S"
+        (select)="onSelect($event)">
+      </ngx-charts-bar-vertical>
+    </div>
+    <div id="graphs" class="d-flex justify-content-center">
+      <ngx-charts-bar-vertical [view]="view"
+        [scheme]="colorScheme"
+        [results]="data_R"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel_R"
+        [yAxisLabel]="yAxisLabel_R"
+        (select)="onSelect($event)">
+      </ngx-charts-bar-vertical>
+    </div>
+    </div>
+    <div id="round-charts" class="d-flex justify-content-center">
+      <ngx-charts-line-chart
+      [view]="view"
+      [scheme]="colorScheme"
+      [legend]="true"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [results]="QRS_CHART"
+      (select)="onSelect($event)"> </ngx-charts-line-chart>
+    </div>
+    <div id="grid-pie" class="d-flex justify-content-center">
+      <ngx-charts-pie-grid
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="single1"
+  (select)="onSelect($event)">
+</ngx-charts-pie-grid>
+    </div>
+  </div>
+
+  </div>
+  <div *ngIf="methodName=='Topsis'">
+    <div class="mb-3 mt-3"><strong>Результат:</strong></div>
+    <div>
+      <strong>Найкращі варіанти працівників:</strong>
+    </div>
+    <ul>
+      <li *ngFor="let number of (AssesmentData$ | async).topsis_C_bestAlternative">{{ number }}</li>
+    </ul>
+    <div>
+      <div>
+        <strong>Пріоритетність працівників за критеріями:</strong>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Порядковий номер кандидата</th>
+            <th scope="col">PIS</th>
+            <th scope="col">NIS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of combinedData_PIS_NIS$ | async; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{item.pis}}</td>
+            <td>{{item.nis}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <strong>Пріоритетність 2:</strong>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Порядковий номер кандидата</th>
+            <th scope="col">Star PIS</th>
+            <th scope="col">Star NIS</th>
+            <th scope="col">Proximity PIS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of combinedData_starPIS_starNIS$ | async; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{item.star_pis}}</td>
+            <td>{{item.star_nis}}</td>
+            <td>{{item.proximity_pis}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="topsis graphs" class="d-flex">
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="data_topsis_pis_graphs"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel_Q"
+        [yAxisLabel]="yAxisLabel_Q"
+        (select)="onSelect($event)">
+      </ngx-charts-bar-vertical >
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="data_topsis_nis_graphs"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel_Q"
+        [yAxisLabel]="yAxisLabel_Q"
+        (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div id="round-charts" class="d-flex justify-content-center">
+        <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [legend]="true"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [results]="PIS_NIS_CHART"
+        (select)="onSelect($event)"> </ngx-charts-line-chart>
+      </div>
+
+  </div>
+  <div id="grid-pie" class="d-flex justify-content-center">
+    <ngx-charts-pie-grid
+[view]="view"
+[scheme]="colorScheme"
+[results]="single1_topsis"
+(select)="onSelect($event)">
+</ngx-charts-pie-grid>
+</div>
+</div>
+<div class="d-flex justify-content-center flex-column">
+  <label>Обрати кандидатів для продовження</label>
+  <button class="btn btn-primary" style="margin-left: auto;" (click)="openFormPopUp()">Обрати</button>
+</div>
+</div>
+
+
+
+
+</div>
+
+</div>

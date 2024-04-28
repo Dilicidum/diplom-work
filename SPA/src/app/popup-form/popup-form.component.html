@@ -1,0 +1,16 @@
+<!-- Remove unnecessary outer divs if they are not styled appropriately -->
+<h2 mat-dialog-title>Dialog Title</h2>
+<div mat-dialog-content>
+  <form>
+    <p>Рекомендації щодо вибору кандидатів: кандидат 10 та 12</p>
+    <mat-form-field>
+      <mat-label>Обрати кандидатів для подальшого проходження</mat-label>
+      <mat-select [formControl]="candidates" multiple>
+        <mat-option *ngFor="let option of toppingList" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button type="submit">Обрати</button>
+  </form>
+</div>

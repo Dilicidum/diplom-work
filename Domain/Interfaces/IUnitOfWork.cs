@@ -11,5 +11,9 @@ namespace Domain.Interfaces
         public Task Save();
 
         public ITasksRepository TasksRepository { get; }
+
+        public ICriteriasRepository CriteriasRepository { get; }
+
+        public ICandidatesRepository CandidatesRepository { get; }
     }
 }

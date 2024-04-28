@@ -24,10 +24,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      console.log(this.loginForm.value.email);
-      return;
-    }
+    console.log('loginForm', this.loginForm.value);
 
     let model = {
       email: this.loginForm.value.email,

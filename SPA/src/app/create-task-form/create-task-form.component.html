@@ -1,4 +1,4 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="container-fluid h-100 d-flex justify-content-center align-items-center flex-column">
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="container-fluid d-flex justify-content-center align-items-center flex-column">
   <div class="form">
     <div class="d-flex flex-row justify-content-between">
       <div>
@@ -41,9 +41,20 @@
         </div>
       </div>
     </div>
-
+    <div class="p-2 form-group" formArrayName="criterias">
+      <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i" class="d-flex flex-row">
+        <div class="p-2">
+          <label>Назва критерію {{i+1}}</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="p-2">
+          <label>Вага критерію {{i+1}}</label>
+          <input type="text" class="form-control" formControlName="vacancyWeight">
+        </div>
+      </div>
+    </div>
     <div class="p-2 form-group" *ngIf="taskForm.enabled">
-      <button type="submit" [disabled]="taskForm.invalid" class="btn btn-primary text-dark">Submit</button>
+      <button type="submit" class="btn btn-primary text-dark">Submit</button>
     </div>
 
   </div>

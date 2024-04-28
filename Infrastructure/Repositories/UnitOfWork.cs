@@ -11,16 +11,34 @@ namespace Infrastructure.Repositories
     {
         private readonly ApplicationContext _context;
         private readonly ITasksRepository _taskRepository;
-        public UnitOfWork(ApplicationContext context, ITasksRepository taskRepository)
+        private readonly ICriteriasRepository _criteriaRepository;
+        private readonly ICandidatesRepository _candidatesRepository;
+        public UnitOfWork(ApplicationContext context, ITasksRepository taskRepository, ICriteriasRepository criteriaRepository, ICandidatesRepository candidatesRepository)
         {
             _context = context;
             _taskRepository = taskRepository;
+            _criteriaRepository = criteriaRepository;
+            _candidatesRepository = candidatesRepository;
         }
 
         public ITasksRepository TasksRepository { 
                 get
                 {
                     return _taskRepository;
+                } 
+            }
+
+        public ICriteriasRepository CriteriasRepository { 
+                get
+                {
+                    return _criteriaRepository;
+                } 
+            }
+
+        public ICandidatesRepository CandidatesRepository { 
+                get
+                {
+                    return _candidatesRepository;
                 } 
             }
 

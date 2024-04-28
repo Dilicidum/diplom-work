@@ -13,6 +13,12 @@ namespace Infrastructure
     public class ApplicationContext: IdentityDbContext<IdentityUser,IdentityRole,string>
     {
         public DbSet<Tasks> Tasks { get; set; }
+
+        public DbSet<Criteria> Criterias { get; set; }
+
+        public DbSet<Candidate> Candidates { get; set; }
+
+        public DbSet<CandidateCriteria> CandidateCriterias { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) { }
 
@@ -27,6 +33,31 @@ namespace Infrastructure
             .HasOne(p => p.User)
             .WithMany()
             .HasForeignKey(p => p.UserId); 
+
+            modelBuilder.Entity<Tasks>()
+                .HasMany(x=>x.Criterias)
+                .WithOne(x=>x.Vacancy)
+                .HasForeignKey(x=>x.VacancyId);
+
+            modelBuilder.Entity<Tasks>()
+                .HasMany(x=>x.Candidates)
+                .WithOne(x=>x.Vacancy)
+                .HasForeignKey(x=>x.VacancyId);
+
+            modelBuilder.Entity<CandidateCriteria>()
+        .HasKey(cc => new { cc.CandidateId, cc.CriteriaId });
+
+    modelBuilder.Entity<CandidateCriteria>()
+        .HasOne(cc => cc.Candidate)
+        .WithMany(c => c.CandidateCriterias)
+        .HasForeignKey(cc => cc.CandidateId)
+        .OnDelete(DeleteBehavior.Restrict); // Restricting delete behavior
+
+    modelBuilder.Entity<CandidateCriteria>()
+        .HasOne(cc => cc.Criteria)
+        .WithMany(c => c.CandidateCriterias)
+        .HasForeignKey(cc => cc.CriteriaId)
+        .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
