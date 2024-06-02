@@ -15,13 +15,11 @@ export interface Tasks {
 }
 
 export enum TaskCategory {
-  fitness = 'Fitness', //0
-  food = 'Food', //1
-  work = 'Work', //2
-  university = 'University', //3
-  health = 'Health', //4
-  friends = 'Friends', //5
-  family = 'Family', //6
+  fitness = 'Development', //0
+  food = 'Sales', //1
+  work = 'Finances', //2
+  university = 'Security', //3
+  health = 'Analytics', //4
 }
 
 export enum TaskType {
@@ -46,11 +44,9 @@ export enum TaskStatusSort {
 
 export enum TaskCategorySort {
   All = '',
-  fitness = 'Fitness', //0
-  food = 'Food', //1
-  work = 'Work', //2
-  university = 'University', //3
-  health = 'Health', //4
-  friends = 'Friends', //5
-  family = 'Family', //6
+  fitness = 'Development', //0
+  food = 'Sales', //1
+  work = 'Finances', //2
+  university = 'Security', //3
+  health = 'Analytics', //4
 }

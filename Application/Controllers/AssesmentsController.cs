@@ -20,11 +20,13 @@ namespace API.Controllers
     {
         private readonly IVikorService _vikorService;
         private readonly ICandidatesService _candidatesService;
+        
         //private readonly ITopsisService _topsisService;
         public AssesmentsController(IVikorService vikorService, ICandidatesService candidatesService)
         {
             _vikorService = vikorService;
             _candidatesService = candidatesService;
+            
             //_topsisService = topsisService;
         }
 
@@ -91,5 +93,11 @@ namespace API.Controllers
 
             return array;
         }
+
+        //[HttpPost("/Analysis/vacancyId")]
+        //public async Task<IActionResult> RecordAnalysisResult()
+        //{ 
+
+        //}
     }
 }

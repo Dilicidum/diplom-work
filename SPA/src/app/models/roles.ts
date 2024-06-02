@@ -1,4 +1,4 @@
 export enum Roles {
-  Admin = 'Admin',
-  User = 'User',
+  TechnicalSpecialist = 'Технічний спеціаліст',
+  Recruiter = 'Рекрутер',
 }

@@ -23,16 +23,6 @@ namespace Service.Services
 
         public async Task AddTask(Tasks task)
         {
-            if(task.TaskType == TaskType.SubTask)
-            {
-                var baseTaskExists = await _taskValidationService.ValidateTaskExistence(task.BaseTaskId.Value);
-
-                if(!baseTaskExists)
-                {
-                    return;
-                }
-            }
-
             await _unitOfWork.TasksRepository.AddAsync(task);
             await _unitOfWork.Save();
         }
@@ -43,8 +33,8 @@ namespace Service.Services
         {
             if(task.TaskType == TaskType.Task)
             {
-                var spec = new SubTasksByBaseTaskIdSpec(task.Id);
-                var subTasks = await _unitOfWork.TasksRepository.ListAsync(spec);
+                //var spec = new SubTasksByBaseTaskIdSpec(task.Id);
+                var subTasks = await _unitOfWork.TasksRepository.ListAsync();
 
                 if (subTasks.Any())
                 {

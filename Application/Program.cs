@@ -47,6 +47,7 @@ builder.Services.AddScoped<ICriteriasService,CriteriasService>();
 builder.Services.AddScoped<ICandidatesService,CandidatesService>();
 builder.Services.AddScoped<ICandidatesRepository,CandidatesRepository>();
 builder.Services.AddScoped<IVikorService,VikorService>();
+builder.Services.AddScoped<IPresentationService,PresentationService>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         builder =>

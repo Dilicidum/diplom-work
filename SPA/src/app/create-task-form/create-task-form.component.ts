@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskCategory, TaskStatus, TaskType, Tasks } from '../models/tasks';
 import { OnChanges } from '@angular/core';
@@ -11,7 +11,7 @@ import { Criteria } from '../models/criteria';
   templateUrl: './create-task-form.component.html',
   styleUrls: ['./create-task-form.component.css'],
 })
-export class CreateTaskFormComponent {
+export class CreateTaskFormComponent implements OnInit {
   taskForm: FormGroup;
   TaskCategory = TaskCategory;
   TaskStatus = TaskStatus;
@@ -37,8 +37,9 @@ export class CreateTaskFormComponent {
       category: ['', Validators.required],
       status: ['', Validators.required],
       criterias: this.fb.array([]),
+      amountOfCriterias: [9, Validators.required],
     });
-    this.addCriterias();
+    this.addCriterias(9);
     this.taskForm.get('type').disable();
 
     if (this.route.snapshot.queryParams['type']) {
@@ -49,6 +50,13 @@ export class CreateTaskFormComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.taskForm.get('amountOfCriterias')?.valueChanges.subscribe((value) => {
+      this.addCriterias(value);
+      console.log('value = ', value);
+    });
+  }
+
   baseTaskId: number = 0;
 
   get criterias() {
@@ -57,17 +65,25 @@ export class CreateTaskFormComponent {
 
   private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
   private defaultWeights = [0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17];
-  addCriterias() {
-    let i = 0;
-    this.defaultCriterias.forEach((criteriaValue) => {
-      this.criterias.push(
-        this.fb.group({
-          name: [criteriaValue, Validators.required],
-          vacancyWeight: [this.defaultWeights[i], Validators.required],
-        })
-      );
-      i++;
-    });
+  addCriterias(numCriterias: number) {
+    while (this.criterias.length !== numCriterias) {
+      if (this.criterias.length < numCriterias) {
+        // Add new criteria if there are fewer criterias than needed
+        let i = this.criterias.length;
+        const criteriaValue =
+          this.defaultCriterias[i % this.defaultCriterias.length];
+        const weightValue = this.defaultWeights[i % this.defaultWeights.length];
+        this.criterias.push(
+          this.fb.group({
+            name: [criteriaValue, Validators.required],
+            vacancyWeight: [weightValue, Validators.required],
+          })
+        );
+      } else {
+        // Remove the last criteria if there are more criterias than needed
+        this.criterias.removeAt(this.criterias.length - 1);
+      }
+    }
   }
 
   onSubmit() {

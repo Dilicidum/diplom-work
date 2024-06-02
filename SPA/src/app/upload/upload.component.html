@@ -19,7 +19,7 @@
     </div>
     <div class="mb-3" formArrayName="criterias">
       <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i">
-        <label>Критерій {{i+1}}</label>
+        <label>Criteria {{i+1}}</label>
         <input type="text" class="form-control" formControlName="value">
       </div>
     </div>
@@ -28,9 +28,9 @@
   <div  *ngIf="showResult$.value">
   <div *ngIf="methodName=='Vikor'">
   <div>
-    <div class="mb-3 mt-3"><strong>Результат:</strong></div>
+    <div class="mb-3 mt-3"><strong>Result:</strong></div>
     <div>
-      <strong>Найкращі варіанти працівників:</strong>
+      <strong>Best options:</strong>
     </div>
     <ul *ngIf="methodName=='Vikor'">
       <li *ngFor="let number of (AssesmentData$ | async).bestAlternatives">{{ number }}</li>
@@ -39,7 +39,7 @@
   </div>
   <div>
     <div>
-      <strong>Пріоритетність працівників за критеріями:</strong>
+      <strong>Priority of candidates according to criterias:</strong>
     </div>
     <table class="table" *ngIf="methodName=='Vikor'">
       <thead>
@@ -60,10 +60,10 @@
       </tbody>
     </table>
   </div>
-  <h1>Графіки:</h1>
+  <h1>Graphics:</h1>
   <div *ngIf="methodName=='Vikor'" id="VIKOR">
     <div >
-      <h6>Графіки Q,S,R:</h6>
+      <h6>Graphics Q,S,R:</h6>
     <div id="graphs" class="d-flex">
 
       <ngx-charts-bar-vertical
@@ -136,16 +136,16 @@
 
   </div>
   <div *ngIf="methodName=='Topsis'">
-    <div class="mb-3 mt-3"><strong>Результат:</strong></div>
+    <div class="mb-3 mt-3"><strong>Result:</strong></div>
     <div>
-      <strong>Найкращі варіанти працівників:</strong>
+      <strong>Best options:</strong>
     </div>
     <ul>
       <li *ngFor="let number of (AssesmentData$ | async).topsis_C_bestAlternative">{{ number }}</li>
     </ul>
     <div>
       <div>
-        <strong>Пріоритетність працівників за критеріями:</strong>
+        <strong>Priority of candidates according to the criterias:</strong>
       </div>
       <table class="table">
         <thead>
@@ -164,7 +164,7 @@
         </tbody>
       </table>
       <div>
-        <strong>Пріоритетність 2:</strong>
+        <strong>Priority 2:</strong>
       </div>
       <table class="table">
         <thead>
@@ -242,8 +242,8 @@
 </div>
 </div>
 <div class="d-flex justify-content-center flex-column">
-  <label>Обрати кандидатів для продовження</label>
-  <button class="btn btn-primary" style="margin-left: auto;" (click)="openFormPopUp()">Обрати</button>
+  <label style="margin-left: auto;">Choose candidates</label>
+  <button class="btn btn-primary" style="margin-left: auto;"  (click)="openFormPopUp()">Choose</button>
 </div>
 </div>
 

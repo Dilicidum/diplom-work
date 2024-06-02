@@ -18,16 +18,16 @@ namespace Infrastructure
 
         public DbSet<Candidate> Candidates { get; set; }
 
+        public DbSet<Analysis> Analyses { get; set; }
+
         public DbSet<CandidateCriteria> CandidateCriterias { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) { 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Tasks>()
-            .HasMany(t => t.SubTasks)
-            .WithOne()
-            .HasForeignKey(t => t.BaseTaskId);
+
+            modelBuilder.Entity<Tasks>().ToTable("Vacancies");
 
              modelBuilder.Entity<Tasks>()
             .HasOne(p => p.User)
@@ -38,6 +38,23 @@ namespace Infrastructure
                 .HasMany(x=>x.Criterias)
                 .WithOne(x=>x.Vacancy)
                 .HasForeignKey(x=>x.VacancyId);
+
+            modelBuilder.Entity<Analysis>()
+                .HasOne(x=>x.Vacancy)
+                .WithMany(x=>x.Analyses)
+                .HasForeignKey(x=>x.VacancyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Analysis>()
+                .HasOne(x=>x.Candidate)
+                .WithMany(x=>x.Analyses)
+                .HasForeignKey(x=>x.CandidateId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //modelBuilder.Entity<Tasks>()
+            //    .HasMany(x=>x.Analyses)
+            //    .WithOne(x=>x.Vacancy)
+            //    .HasForeignKey(x=>x.VacancyId);
 
             modelBuilder.Entity<Tasks>()
                 .HasMany(x=>x.Candidates)

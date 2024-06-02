@@ -22,6 +22,29 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.Analysis", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VacancyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("Analyses");
+                });
+
             modelBuilder.Entity("Domain.Entities.Candidate", b =>
                 {
                     b.Property<int>("Id")
@@ -109,9 +132,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BaseTaskId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
@@ -138,11 +158,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BaseTaskId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Vacancies", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -343,6 +361,25 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Analysis", b =>
+                {
+                    b.HasOne("Domain.Entities.Candidate", "Candidate")
+                        .WithMany("Analyses")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Tasks", "Vacancy")
+                        .WithMany("Analyses")
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Vacancy");
+                });
+
             modelBuilder.Entity("Domain.Entities.Candidate", b =>
                 {
                     b.HasOne("Domain.Entities.Tasks", "Vacancy")
@@ -384,10 +421,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Tasks", b =>
                 {
-                    b.HasOne("Domain.Entities.Tasks", null)
-                        .WithMany("SubTasks")
-                        .HasForeignKey("BaseTaskId");
-
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -450,6 +483,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Candidate", b =>
                 {
+                    b.Navigation("Analyses");
+
                     b.Navigation("CandidateCriterias");
                 });
 
@@ -460,11 +495,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Tasks", b =>
                 {
+                    b.Navigation("Analyses");
+
                     b.Navigation("Candidates");
 
                     b.Navigation("Criterias");
-
-                    b.Navigation("SubTasks");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,15 +1,19 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskCategory, TaskStatus, Tasks } from '../models/tasks';
 import { OnChanges } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { TasksService } from '../services/tasks.service';
+import { HttpClient } from '@angular/common/http';
+import { Criteria } from '../models/criteria';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.css'],
 })
-export class TaskCardComponent implements OnChanges {
+export class TaskCardComponent implements OnChanges, OnInit {
+  @Input() showCriterias: boolean;
   @Input() task: Tasks;
   @Input() isDetailed: boolean = false;
   @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();
@@ -22,7 +26,9 @@ export class TaskCardComponent implements OnChanges {
 
   constructor(
     private formBuilder: FormBuilder,
-    private taskService: TasksService
+    private taskService: TasksService,
+    private http: HttpClient,
+    private route: ActivatedRoute
   ) {
     this.taskCategories = Object.keys(this.TaskCategory);
     this.taskStatuses = Object.keys(this.TaskStatus);
@@ -32,12 +38,49 @@ export class TaskCardComponent implements OnChanges {
       dueDate: ['', Validators.required],
       category: ['', Validators.required],
       status: ['', Validators.required],
+      criterias: this.formBuilder.array([]),
     });
+    console.log(this.showCriterias);
+
+    if (this.showCriterias) {
+      this.addCriterias();
+    }
     this.taskForm.disable();
+  }
+
+  ngOnInit(): void {
+    if (this.isDetailed) {
+      this.addCriterias();
+    }
+    console.log('isDetailed = ', this.isDetailed);
   }
 
   ngOnChanges(changes: any): void {
     this.updateForm(this.task);
+  }
+
+  get criterias() {
+    return this.taskForm.get('criterias') as FormArray;
+  }
+
+  private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
+  private defaultWeights = [0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17];
+  addCriterias() {
+    this.http
+      .get<Criteria[]>('http://localhost:5292/api/criterias/' + this.task.id)
+      .subscribe((data) => {
+        console.log('criterias = ', data);
+      });
+    let i = 0;
+    this.defaultCriterias.forEach((criteriaValue) => {
+      this.criterias.push(
+        this.formBuilder.group({
+          name: [criteriaValue, Validators.required],
+          vacancyWeight: [this.defaultWeights[i], Validators.required],
+        })
+      );
+      i++;
+    });
   }
 
   updateForm(data: Tasks): void {

@@ -24,5 +24,7 @@ namespace Domain.Entities
 
         public List<CandidateCriteria> CandidateCriterias { get; set; }
 
+        public List<Analysis> Analyses { get; set; }
+
     }
 }

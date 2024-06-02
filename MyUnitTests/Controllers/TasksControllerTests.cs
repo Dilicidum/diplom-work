@@ -74,7 +74,6 @@ namespace UnitTests.Controllers
 
             var task = new Tasks(){
                 TaskType = TaskType.Task,
-                BaseTaskId = null,
                 Category = TaskCategory.Work,
                 Status = Domain.Entities.TaskStatus.None,
                 Name = "TaskName",

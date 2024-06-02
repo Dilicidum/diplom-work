@@ -55,7 +55,7 @@ namespace UnitTests.Services
         public async Task AddTask_BaseTasksExists_TaskAdded()
         {
             // Arrange
-            var task = new Tasks { TaskType = TaskType.SubTask, BaseTaskId = 1 };
+            var task = new Tasks { TaskType = TaskType.SubTask};
             _taskValidationService.Setup(x => x.ValidateTaskExistence(It.IsAny<int>())).ReturnsAsync(true);
 
             // Act
@@ -69,7 +69,7 @@ namespace UnitTests.Services
         public async Task AddTask_BaseTasksExists_TaskNotAdded()
         {
             // Arrange
-            var task = new Tasks { TaskType = TaskType.SubTask, BaseTaskId = 1 };
+            var task = new Tasks { TaskType = TaskType.SubTask};
             _taskValidationService.Setup(x => x.ValidateTaskExistence(It.IsAny<int>())).ReturnsAsync(false);
 
             // Act
@@ -86,12 +86,12 @@ namespace UnitTests.Services
             var taskId = 1;
             var subTasks = new List<Tasks>
             {
-                new Tasks { Id = 2, BaseTaskId = taskId, TaskType = TaskType.SubTask },
+                new Tasks { Id = 2, TaskType = TaskType.SubTask },
             };
             var task = new Tasks { Id = taskId, TaskType = TaskType.Task };
 
-            _unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(),It.IsAny<CancellationToken>()))
-                       .ReturnsAsync(subTasks);
+            //_unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(),It.IsAny<CancellationToken>()))
+              //         .ReturnsAsync(subTasks);
 
             // Act
             await _service.DeleteTask(task);
@@ -111,8 +111,8 @@ namespace UnitTests.Services
         {
             // Arrange
             var task = new Tasks { Id = 1, TaskType = TaskType.Task };
-            _unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(), It.IsAny<CancellationToken>()))
-                       .ReturnsAsync(new List<Tasks>());
+            //_unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(), It.IsAny<CancellationToken>()))
+              //         .ReturnsAsync(new List<Tasks>());
 
             // Act
             await _service.DeleteTask(task);
@@ -144,8 +144,8 @@ namespace UnitTests.Services
             // Arrange
             var task = GetTasks().Where(x => x.Id == taskId).FirstOrDefault();
 
-            _unitOfWork.Setup(x => x.TasksRepository.FirstOrDefaultAsync(It.IsAny<TaskByUserIdAndTaskIdSpec>(), It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(task);
+            //_unitOfWork.Setup(x => x.TasksRepository.FirstOrDefaultAsync(It.IsAny<TaskByUserIdAndTaskIdSpec>(), It.IsAny<CancellationToken>()))
+              //     .ReturnsAsync(task);
 
             // Act
             var res = await _service.GetTaskById(userId, taskId);
@@ -161,10 +161,10 @@ namespace UnitTests.Services
             {
                 new Tasks { Id = 1, UserId = "testUserId",TaskType = TaskType.Task,Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
                 new Tasks { Id = 2, UserId = "wrongUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work, BaseTaskId = 2},
+                new Tasks { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
                 new Tasks { Id = 4, UserId = "testUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
-                new Tasks { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
-                new Tasks { Id = 6, UserId = "wrongUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work, BaseTaskId = 1},
+                new Tasks { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
+                new Tasks { Id = 6, UserId = "wrongUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
             };
         }
     }

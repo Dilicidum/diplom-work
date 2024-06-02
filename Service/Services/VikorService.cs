@@ -12,7 +12,10 @@ namespace Application.Services
         public static List<double> NIS { get; set; }
         public static List<double> Matr_W { get; set; }
 
-        public VikorService() {
+        IPresentationService _presentationService { get; set; }
+
+        public VikorService(IPresentationService presentationService) {
+            _presentationService = presentationService;
             PIS = new List<double> { /* initial values */ };
             NIS = new List<double> { };
             Matr_W = new List<double> { 0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17 };
@@ -99,59 +102,13 @@ namespace Application.Services
             
             file1.WriteLine("ранжування альтернатив");
             file1.WriteLine(spysokAlt);
-            var minQ = Q_proximity1.Min(x => x);
-            var result = new ModelResponse();
-            result.BestAlternatives.Add(Q_proximity.ToList().IndexOf(minQ) + 1);
-            result.AlternativesInOrder = result.GetAlternativesInOrder(Q_proximity,Q_proximity1);
-            result.AlternativesInOrder_S_Dictionary = result.GetAlternativesInOrder(S_medium.ToArray(),S_medium1);
-            result.AlternativesInOrder_S = result.AlternativesInOrder_S_Dictionary.Keys.ToList();
-            result.AlternativesInOrder_R_Dictionary = result.GetAlternativesInOrder(R_max, R_max1);
-            result.AlternativesInOrder_R = result.AlternativesInOrder_R_Dictionary.Keys.ToList();
-            var AlternativesInOrderSorted = result.AlternativesInOrder.OrderBy(x=>x.Key);
-            var AlternativesInOrder_S_Sorted = result.AlternativesInOrder_S_Dictionary.OrderBy(x=>x.Key);
-            var AlternativesInOrder_R_Sorted = result.AlternativesInOrder_R_Dictionary.OrderBy(x=>x.Key);
-            var series = new List<Serie>();
-            var series1 = new List<Serie>();
-            var series2 = new List<Serie>();
-            foreach(var item in AlternativesInOrderSorted){
-                series.Add(new Serie(){
-                    Name = (item.Key + 1).ToString(),
-                    Value = item.Value
-                });
-            }
-            foreach(var item in AlternativesInOrder_S_Sorted){
-                series1.Add(new Serie(){
-                    Name = (item.Key + 1).ToString(),
-                    Value = item.Value
-                });
-            }
-            foreach(var item in AlternativesInOrder_R_Sorted){
-                series2.Add(new Serie(){
-                    Name = (item.Key + 1).ToString(),
-                    Value = item.Value
-                });
-            }
+            var minQ = Q_proximity1.Min(x => x);                                                                                               
+            //var result = new ModelResponse();
             
-            result.QRS_Horizontal_Chart.Add(new ChartDisplayModel()
-            {
-                Name = "Q",
-                Series = series
-            });
-            result.QRS_Horizontal_Chart.Add(new ChartDisplayModel()
-            {
-                Name = "S",
-                Series = series1
-            });
-            result.QRS_Horizontal_Chart.Add(new ChartDisplayModel()
-            {
-                Name = "R",
-                Series = series2
-            });
-            series.ForEach(item =>
-            {
-                item.Value = 1 - item.Value;
-            });
-            result.Vikor_Pie_Grid = series;
+            var bestAlternative = Q_proximity.ToList().IndexOf(minQ);
+            
+            var result = _presentationService.PrepareData(bestAlternative,Q_proximity,Q_proximity1, S_medium.ToArray(), S_medium1, R_max, R_max1, DQ, minQ);            
+
             return result;
             }
             

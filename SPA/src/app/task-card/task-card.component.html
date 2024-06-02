@@ -25,13 +25,6 @@
 
     <div>
       <div class="p-2 form-group">
-        <label for="type">Task type</label>
-        <select id="type" class="form-control" [disabled]="true">
-          <option >{{task.taskType}}</option>
-        </select>
-      </div>
-
-      <div class="p-2 form-group">
         <label for="Name">Name</label>
         <input type="text" id="Name" class="form-control" formControlName="name" placeholder="Enter task name">
       </div>
@@ -39,6 +32,19 @@
       <div class="p-2 form-group">
         <label for="description">Description</label>
         <input type="text" id="description" formControlName="description" class="form-control" placeholder="Enter description">
+      </div>
+    </div>
+
+    <div class="p-2 form-group" formArrayName="criterias">
+      <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i" class="d-flex flex-row">
+        <div class="p-2">
+          <label>Criteria name {{i+1}}</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="p-2">
+          <label>Criteria weight {{i+1}}</label>
+          <input type="text" class="form-control" formControlName="vacancyWeight">
+        </div>
       </div>
     </div>
 
@@ -65,7 +71,7 @@
         <button class="btn btn-primary text-dark" [routerLink]="['/tasks',task.id,task.userId]">More detailed info</button>
       </div>
       <div class="p-2 form-group">
-        <button class="btn btn-primary text-dark" [routerLink]="['/upload',task.id]">Аналіз</button>
+        <button class="btn btn-primary text-dark" [routerLink]="['/upload',task.id]">Analysis</button>
       </div>
     </div>
   </div>

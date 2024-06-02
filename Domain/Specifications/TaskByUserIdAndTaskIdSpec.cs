@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Domain.Specifications
 {
@@ -12,7 +13,7 @@ namespace Domain.Specifications
     {
         public TaskByUserIdAndTaskIdSpec(string userId, int taskId)
         {
-            Query.Where(x => x.UserId == userId && x.Id == taskId).Include(x=>x.SubTasks);
+            Query.Where(x => x.UserId == userId && x.Id == taskId);
         }
     }
 }

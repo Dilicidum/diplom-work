@@ -17,10 +17,6 @@ namespace Domain.Entities
 
         public TaskStatus Status { get; set; }
 
-        public List<Tasks> SubTasks { get; set; }
-
-        public int? BaseTaskId { get;set; }
-
         public TaskType TaskType { get; set; }
 
         public string UserId { get; set; }
@@ -28,6 +24,8 @@ namespace Domain.Entities
         public DateTime DueDate { get; set; }
 
         public IdentityUser User { get; set; }
+
+        public List<Analysis> Analyses { get; set; }
 
         public List<Criteria> Criterias { get; set; }
 

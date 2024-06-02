@@ -134,18 +134,18 @@ export class UploadComponent implements OnInit {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel_Q = 'Код кандидата';
+  xAxisLabel_Q = 'Candidate Id';
   showYAxisLabel = true;
   yAxisLabel_Q = 'Коефіцієнт Компромісного рішення(Q)';
-  xAxisLabel_S = 'Код кандидата';
+  xAxisLabel_S = 'Candidate Id';
   yAxisLabel_S = 'Коефіцієнт загального задоволення (S)';
   yAxisLabel_R = 'Коефіцієнт максимальної відстані (R)';
-  xAxisLabel_R = 'Код кандидата';
+  xAxisLabel_R = 'Candidate Id';
   colorScheme = 'vivid';
   colorSchemeHorizontal = 'solar';
   xAxis: boolean = true;
   yAxis: boolean = true;
-  xAxisLabel: string = 'Код кандидата';
+  xAxisLabel: string = 'Candidate Id';
   yAxisLabel: string = 'Q,R,S показники';
   onSelect(event) {
     console.log(event);
@@ -351,8 +351,10 @@ export class UploadComponent implements OnInit {
             value_R: data.alternativesInOrder_R[j] + 1 || 0,
             bestAlternatives: data.bestAlternatives,
           });
+
           j = j + 1;
         });
+        this.bestAlternatives.push(data.bestAlternatives);
         console.log('this.single = ', this.single);
         Object.assign(this, {
           single: this.single,
@@ -369,10 +371,13 @@ export class UploadComponent implements OnInit {
     this.showResult$.next(true);
   }
 
+  bestAlternatives: any[] = [];
+
   openFormPopUp() {
     const dialogRef = this.dialog.open(PopupFormComponent, {
       width: '250px',
-      // data: { name: 'Angular' } // You can pass data to the dialog here
+
+      data: { bestAlternatives: this.bestAlternatives, amountOfCandidates: 15 }, // You can pass data to the dialog here
     });
 
     dialogRef.afterClosed().subscribe((result) => {

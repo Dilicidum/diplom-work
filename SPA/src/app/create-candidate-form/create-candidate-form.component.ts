@@ -42,7 +42,7 @@ export class CreateCandidateFormComponent {
       .subscribe((data) => {
         let criteriasNames = data.map((criteria) => criteria.name);
         this.criteriaIds = data.map((criteria) => criteria.id);
-        this.addCriterias(criteriasNames);
+        this.addCriterias(criteriasNames, 9);
         console.log('data = ', data);
         console.log('criteriaIds = ', this.criteriaIds);
       });
@@ -77,18 +77,28 @@ export class CreateCandidateFormComponent {
   private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
   private defaultWeights = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  addCriterias(defaultCriterias: string[]) {
+  addCriterias(defaultCriterias: string[], numCriterias: number) {
     let i = 0;
-    defaultCriterias.forEach((criteriaValue) => {
-      this.criterias.push(
-        this.fb.group({
-          name: [{ value: criteriaValue, disabled: true }, Validators.required],
-          vacancyWeight: [this.defaultWeights[i], Validators.required],
-        })
-      );
-      i++;
-    });
-    console.log('criterias = ', this.criterias);
+    while (this.criterias.length !== numCriterias) {
+      if (this.criterias.length < numCriterias) {
+        // Add new criteria if there are fewer criterias than needed
+        let i = this.criterias.length;
+        const criteriaValue =
+          i < defaultCriterias.length
+            ? defaultCriterias[i]
+            : this.defaultCriterias[i % this.defaultCriterias.length];
+        const weightValue = this.defaultWeights[i % this.defaultWeights.length];
+        this.criterias.push(
+          this.fb.group({
+            name: [criteriaValue, Validators.required],
+            vacancyWeight: [weightValue, Validators.required],
+          })
+        );
+      } else {
+        // Remove the last criteria if there are more criterias than needed
+        this.criterias.removeAt(this.criterias.length - 1);
+      }
+    }
   }
 
   onSubmit() {
