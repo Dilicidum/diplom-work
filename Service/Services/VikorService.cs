@@ -364,6 +364,11 @@ namespace Application.Services
                 {
                     number = Math.Abs(rStar - sStar);
                 }
+                if(number > 1)
+                {
+                    var numberInt = Convert.ToInt32(number);
+                    number = number - numberInt;
+                }
             qProxyStar[i] = number;
             Console.WriteLine($"Q{i + 1} = {qProxyStar[i]}");
         }

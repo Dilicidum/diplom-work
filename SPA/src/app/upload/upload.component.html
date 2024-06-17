@@ -1,16 +1,7 @@
 <div class="d-flex flex-column">
 <div class="d-flex flex-column">
-  <h3>Загрузіть файл з оцінками\критеріями кандидатів для отримання найкращих варіантів</h3>
-  <div class="row mb-2">
-    <div class="col-sm-12 col-md-8"><strong> Формат файлу: </strong> Матриця, елементи якої відділяються один від одного по стовпичках через пробіл</div>
-    <div class="col-sm-12 col-md-8"><strong>Матриця</strong> не має містити нічого іншого крім оцінок критеріїв</div>
-  </div>
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" style="width: 18rem;">
-    <div class="mb-3 ">
-      <label for="file" class="form-label"><strong>Загрузіть файл</strong></label>
-      <input type="file" class="form-control" id="file" (change)="onFileSelect($event)">
-    </div>
-    <div class="mb-3">
+    <div hidden class="mb-3">
       <label for="method">Choose from options:</label>
       <select formControlName="methodName" class="form-control" id="method">
         <option ngValue="Vikor">Vikor</option>
@@ -69,6 +60,9 @@
     </div>
 
     </div>
+    <div id="round-charts" class="d-flex justify-content-center">R - max distance to ideal solution</div>
+    <div id="round-charts" class="d-flex justify-content-center">S - average distance to ideal solution</div>
+    <div id="round-charts" class="d-flex justify-content-center">Q - joins R and S together</div>
     <div id="round-charts" class="d-flex justify-content-center">
       <ngx-charts-line-chart
       [view]="view"

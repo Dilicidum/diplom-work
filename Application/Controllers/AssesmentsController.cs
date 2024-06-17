@@ -40,11 +40,7 @@ namespace API.Controllers
             var criteriasArray = JsonConvert.DeserializeObject<double[]>(model.Criterias);
 
             var array = await _candidatesService.GetCriteriasForCandidatesForVacancy(vacancyId);
-            model.File = null;
-            if(model.File != null)
-            {
-                array = await ParseFile(model.File);
-            }
+            
 
             var result = new ModelResponse();
 
