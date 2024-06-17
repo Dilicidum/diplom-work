@@ -17,7 +17,7 @@ export class TaskCardComponent implements OnChanges, OnInit {
   @Input() task: Tasks;
   @Input() isDetailed: boolean = false;
   @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();
-
+  userRole: string = localStorage.getItem('role');
   taskForm: FormGroup;
   TaskCategory = TaskCategory;
   TaskStatus = TaskStatus;
@@ -45,13 +45,21 @@ export class TaskCardComponent implements OnChanges, OnInit {
     if (this.showCriterias) {
       this.addCriterias();
     }
-    this.taskForm.disable();
   }
-
+  Results: [] = [];
   ngOnInit(): void {
     if (this.isDetailed) {
       this.addCriterias();
     }
+    this.http
+      .get('http://localhost:5292/api/Assesments/Analysis/' + this.task.id)
+      .subscribe((data: []) => {
+        if (data) {
+          this.Results = data;
+        }
+      });
+    console.log(this.userRole);
+    console.log('now TASK', this.task);
     console.log('isDetailed = ', this.isDetailed);
   }
 
@@ -63,24 +71,34 @@ export class TaskCardComponent implements OnChanges, OnInit {
     return this.taskForm.get('criterias') as FormArray;
   }
 
+  criteriasForVacancy: Criteria[] = [];
+
   private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
   private defaultWeights = [0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17];
   addCriterias() {
     this.http
       .get<Criteria[]>('http://localhost:5292/api/criterias/' + this.task.id)
       .subscribe((data) => {
+        this.criteriasForVacancy = data;
         console.log('criterias = ', data);
+        let i = 0;
+        this.defaultWeights = this.criteriasForVacancy.map((criteria) => {
+          return criteria.vacancyWeight;
+        });
+        this.defaultCriterias = this.criteriasForVacancy.map((criteria) => {
+          return criteria.name;
+        });
+        this.defaultCriterias.forEach((criteriaValue) => {
+          this.criterias.push(
+            this.formBuilder.group({
+              name: [criteriaValue, Validators.required],
+              vacancyWeight: [this.defaultWeights[i], Validators.required],
+            })
+          );
+          i++;
+        });
       });
     let i = 0;
-    this.defaultCriterias.forEach((criteriaValue) => {
-      this.criterias.push(
-        this.formBuilder.group({
-          name: [criteriaValue, Validators.required],
-          vacancyWeight: [this.defaultWeights[i], Validators.required],
-        })
-      );
-      i++;
-    });
   }
 
   updateForm(data: Tasks): void {
@@ -89,7 +107,7 @@ export class TaskCardComponent implements OnChanges, OnInit {
     }
 
     let formattedDate = formatDate(this.task.dueDate, 'yyyy-MM-dd', 'en-US');
-
+    console.log('TaskCategory', this.TaskCategory);
     this.taskForm.patchValue({
       name: this.task.name,
       description: this.task.description,
@@ -115,6 +133,7 @@ export class TaskCardComponent implements OnChanges, OnInit {
     this.task.category = this.taskForm.get('category').value;
     this.task.status = this.taskForm.get('status').value;
     this.task.dueDate = this.taskForm.get('dueDate').value;
+    this.task.criterias = this.taskForm.get('criterias').value;
     this.taskService.updateTask(this.task).subscribe((data) => {});
     this.taskForm.disable();
   }

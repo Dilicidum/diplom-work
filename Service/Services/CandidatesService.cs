@@ -46,17 +46,37 @@ namespace Services.Services
         public async Task<double[,]> GetCriteriasForCandidatesForVacancy(int vacancyId)
         {
             var candidates = (await _unitOfWork.CandidatesRepository.GetCandidatesByVacancyId(vacancyId)).ToList();
-            
-            var res = new double[candidates.Count,9];
+            var vacancy = await _unitOfWork.TasksRepository.GetTaskByIdWithIncluded(vacancyId);
+            var res = new double[candidates.Count,vacancy.Criterias.Count];
             for(int i = 0; i < candidates.Count; i++)
             {
                 candidates[i].CandidateCriterias.OrderBy(x=>x.CriteriaId);
-                for(int j = 0; j < 9; j++)
+                for(int j = 0; j < vacancy.Criterias.Count; j++)
                 {
                     res[i,j] = candidates[i].CandidateCriterias[j].Value;
                 }
             }
             return res;
+        }
+
+        public async Task UpdateCandidate(int vacancyId, Candidate candidate)
+        {
+            candidate.VacancyId = vacancyId;
+            var temp = candidate.CandidateCriterias;
+            foreach(var item in candidate.CandidateCriterias)
+            {
+                if(item.Value != 0)
+                {
+                    item.Value = item.Value / 2;
+                }
+            }
+            //candidate.CandidateCriterias = null;
+            var res = await _unitOfWork.CandidatesRepository.GetById(candidate.Id);
+            res.Phone = candidate.Phone;
+            res.Email = candidate.Email;
+            res.Name = candidate.Name;
+            await _unitOfWork.CandidatesRepository.UpdateAsync(res);
+            await _unitOfWork.Save();
         }
     }
 }

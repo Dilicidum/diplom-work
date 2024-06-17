@@ -19,6 +19,17 @@ export class CreateTaskFormComponent implements OnInit {
   taskCategories: string[];
   taskStatuses: string[];
   taskTypes: string[];
+  hints: string[] = [
+    'Degree',
+    'Experience',
+    'Skills',
+    'Certifications',
+    'Languages',
+    'Location',
+    'Salary',
+    'Benefits',
+  ];
+  displayedHints: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,7 +43,6 @@ export class CreateTaskFormComponent implements OnInit {
     this.taskForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', Validators.required],
-      type: ['', Validators.required],
       dueDate: ['', Validators.required],
       category: ['', Validators.required],
       status: ['', Validators.required],
@@ -40,7 +50,6 @@ export class CreateTaskFormComponent implements OnInit {
       amountOfCriterias: [9, Validators.required],
     });
     this.addCriterias(9);
-    this.taskForm.get('type').disable();
 
     if (this.route.snapshot.queryParams['type']) {
       this.TaskType = this.route.snapshot.queryParams['type'];
@@ -50,11 +59,18 @@ export class CreateTaskFormComponent implements OnInit {
     }
   }
 
+  getRandomHint(): string {
+    return this.hints[Math.floor(Math.random() * this.hints.length)];
+  }
+
   ngOnInit(): void {
     this.taskForm.get('amountOfCriterias')?.valueChanges.subscribe((value) => {
       this.addCriterias(value);
       console.log('value = ', value);
     });
+    for (let ind = 0; ind < 9; ind++) {
+      this.displayedHints[ind] = this.getRandomHint();
+    }
   }
 
   baseTaskId: number = 0;
@@ -105,7 +121,7 @@ export class CreateTaskFormComponent implements OnInit {
     if (this.TaskType == TaskType.subTask) {
       newTask.baseTaskId = this.baseTaskId;
     }
-
+    newTask.taskType = TaskType.task;
     this.taskService.createTask(newTask).subscribe((data) => {
       this.router.navigate(['tasks']);
     });

@@ -38,7 +38,7 @@ namespace UnitTests.Services
         public async Task ValidateTaskExistence_ShouldReturnTrue_WhenTaskExists(int taskId)
         {
             // Arrange
-            var task = new Tasks { Id = taskId};
+            var task = new Vacancy { Id = taskId};
 
             _unitOfWork.Setup(x => x.TasksRepository.GetByIdAsync(taskId,It.IsAny<CancellationToken>())).ReturnsAsync(task);
 
@@ -54,7 +54,7 @@ namespace UnitTests.Services
         public async Task ValidateTaskExistence_ShouldReturnFalse_WhenTaskDoesNotExist(int taskId)
         {
             // Arrange
-            _unitOfWork.Setup(x => x.TasksRepository.GetByIdAsync(taskId,It.IsAny<CancellationToken>())).ReturnsAsync((Tasks)null);
+            _unitOfWork.Setup(x => x.TasksRepository.GetByIdAsync(taskId,It.IsAny<CancellationToken>())).ReturnsAsync((Vacancy)null);
 
             // Act
             var result = await _service.ValidateTaskExistence(taskId);

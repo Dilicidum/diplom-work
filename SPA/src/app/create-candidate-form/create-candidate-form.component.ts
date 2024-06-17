@@ -41,8 +41,13 @@ export class CreateCandidateFormComponent {
       )
       .subscribe((data) => {
         let criteriasNames = data.map((criteria) => criteria.name);
+        let criteriasValues = data.map((criteria) => criteria.vacancyWeight);
         this.criteriaIds = data.map((criteria) => criteria.id);
-        this.addCriterias(criteriasNames, 9);
+        this.addCriterias(
+          criteriasNames,
+          criteriasValues,
+          criteriasNames.length
+        );
         console.log('data = ', data);
         console.log('criteriaIds = ', this.criteriaIds);
       });
@@ -77,7 +82,11 @@ export class CreateCandidateFormComponent {
   private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
   private defaultWeights = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  addCriterias(defaultCriterias: string[], numCriterias: number) {
+  addCriterias(
+    defaultCriterias: string[],
+    criteriasValues: number[],
+    numCriterias: number
+  ) {
     let i = 0;
     while (this.criterias.length !== numCriterias) {
       if (this.criterias.length < numCriterias) {
@@ -87,7 +96,7 @@ export class CreateCandidateFormComponent {
           i < defaultCriterias.length
             ? defaultCriterias[i]
             : this.defaultCriterias[i % this.defaultCriterias.length];
-        const weightValue = this.defaultWeights[i % this.defaultWeights.length];
+        const weightValue = criteriasValues[i % this.defaultWeights.length];
         this.criterias.push(
           this.fb.group({
             name: [criteriaValue, Validators.required],
@@ -128,7 +137,7 @@ export class CreateCandidateFormComponent {
     criterias.forEach((criteria: any) => {
       let candidateCriteria = new CandidateCriteria();
       candidateCriteria.criteriaId = this.criteriaIds[i];
-      candidateCriteria.value = criteria.vacancyWeight;
+      candidateCriteria.value = 0;
       console.log('candidateCriteria = ', candidateCriteria);
       candidateCriterias.push(candidateCriteria);
       i++;
@@ -137,7 +146,7 @@ export class CreateCandidateFormComponent {
     console.log('candidate = ', candidate);
     this.http
       .post(
-        'http://localhost:5292/api/Criterias/' +
+        'http://localhost:5292/api/Criterias/Candidates/' +
           this.route.snapshot.queryParams['baseTaskId'],
         candidate
       )

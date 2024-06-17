@@ -15,11 +15,11 @@ export interface Tasks {
 }
 
 export enum TaskCategory {
-  fitness = 'Development', //0
-  food = 'Sales', //1
-  work = 'Finances', //2
-  university = 'Security', //3
-  health = 'Analytics', //4
+  development = 'Development', //0
+  sales = 'Sales', //1
+  finances = 'Finances', //2
+  security = 'Security', //3
+  analytics = 'Analytics', //4
 }
 
 export enum TaskType {

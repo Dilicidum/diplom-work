@@ -11,7 +11,7 @@
       <input type="file" class="form-control" id="file" (change)="onFileSelect($event)">
     </div>
     <div class="mb-3">
-      <label for="method">Оберіть метод підбору найкращого варіанту:</label>
+      <label for="method">Choose from options:</label>
       <select formControlName="methodName" class="form-control" id="method">
         <option ngValue="Vikor">Vikor</option>
         <option ngValue="Topsis">Topsis</option>
@@ -20,7 +20,7 @@
     <div class="mb-3" formArrayName="criterias">
       <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i">
         <label>Criteria {{i+1}}</label>
-        <input type="text" class="form-control" formControlName="value">
+        <input type="text" class="form-control" formControlName="vacancyWeight">
       </div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -41,30 +41,16 @@
     <div>
       <strong>Priority of candidates according to criterias:</strong>
     </div>
-    <table class="table" *ngIf="methodName=='Vikor'">
-      <thead>
-        <tr>
-          <th scope="col">Ранг за Q</th>
-          <th scope="col">Q</th>
-          <th scope="col">Ранг за S</th>
-          <th scope="col">Ранг за R</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of (mergedData$ | async)">
-          <td>{{item.key}}</td>
-          <td>{{item.value}}</td>
-          <td>{{item.value_S}}</td>
-          <td>{{item.value_R}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <ul class="table" *ngIf="methodName=='Vikor'">
+      <li *ngFor="let item of (mergedData$ | async)">
+        {{item.key}}
+      </li>
+    </ul>
   </div>
   <h1>Graphics:</h1>
   <div *ngIf="methodName=='Vikor'" id="VIKOR">
     <div >
-      <h6>Graphics Q,S,R:</h6>
-    <div id="graphs" class="d-flex">
+    <div id="graphs" class="d-flex justify-content-center">
 
       <ngx-charts-bar-vertical
         [view]="view"
@@ -80,35 +66,8 @@
         [yAxisLabel]="yAxisLabel_Q"
         (select)="onSelect($event)">
       </ngx-charts-bar-vertical >
-      <ngx-charts-bar-vertical [view]="view"
-        [scheme]="colorScheme"
-        [results]="data_S"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="false"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel_S"
-        [yAxisLabel]="yAxisLabel_S"
-        (select)="onSelect($event)">
-      </ngx-charts-bar-vertical>
     </div>
-    <div id="graphs" class="d-flex justify-content-center">
-      <ngx-charts-bar-vertical [view]="view"
-        [scheme]="colorScheme"
-        [results]="data_R"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="false"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel_R"
-        [yAxisLabel]="yAxisLabel_R"
-        (select)="onSelect($event)">
-      </ngx-charts-bar-vertical>
-    </div>
+
     </div>
     <div id="round-charts" class="d-flex justify-content-center">
       <ngx-charts-line-chart

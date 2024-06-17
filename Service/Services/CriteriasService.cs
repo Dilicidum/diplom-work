@@ -21,6 +21,12 @@ namespace Services.Services
             _mapper = mapper;
         }
 
+        public async Task AddCriterias(List<Criteria> criterias)
+        {
+            await _unitOfWork.CriteriasRepository.AddRangeAsync(criterias);
+            await _unitOfWork.Save();
+        }
+
         public async Task<IEnumerable<CriteriaDto>> GetAll()
         {
             throw new NotImplementedException();

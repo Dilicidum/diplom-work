@@ -24,17 +24,17 @@ namespace UnitTests.Services
     public class TasksServiceTests
     {
         private Mock<IUnitOfWork> _unitOfWork;
-        private Mock<ITasksRepository> _tasksRepository;
+        private Mock<IVacancyRepository> _tasksRepository;
         private Mock<ITaskValidationService> _taskValidationService;
-        private TasksService _service;
+        private VacanciesService _service;
 
         [SetUp]
         public void Setup()
         {
-            _tasksRepository = new Mock<ITasksRepository>();
+            _tasksRepository = new Mock<IVacancyRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
             _taskValidationService= new Mock<ITaskValidationService>();
-            _service = new TasksService(_unitOfWork.Object,_taskValidationService.Object);
+            _service = new VacanciesService(_unitOfWork.Object,_taskValidationService.Object);
             _unitOfWork.Setup(x => x.TasksRepository).Returns(_tasksRepository.Object);
         }
 
@@ -42,10 +42,10 @@ namespace UnitTests.Services
         public async Task AddTask_BaseTaskNotExists_TaskAdded()
         {
             //Arrange
-            Tasks task = new Tasks();
+            Vacancy task = new Vacancy();
 
             //Act
-            await _service.AddTask(task);
+            await _service.AddVacancy(task);
 
             //Assert
             _unitOfWork.Verify(x => x.Save());
@@ -55,11 +55,11 @@ namespace UnitTests.Services
         public async Task AddTask_BaseTasksExists_TaskAdded()
         {
             // Arrange
-            var task = new Tasks { TaskType = TaskType.SubTask};
+            var task = new Vacancy { TaskType = TaskType.SubTask};
             _taskValidationService.Setup(x => x.ValidateTaskExistence(It.IsAny<int>())).ReturnsAsync(true);
 
             // Act
-            await _service.AddTask(task);
+            await _service.AddVacancy(task);
 
             // Assert
             _unitOfWork.Verify(x => x.Save());
@@ -69,11 +69,11 @@ namespace UnitTests.Services
         public async Task AddTask_BaseTasksExists_TaskNotAdded()
         {
             // Arrange
-            var task = new Tasks { TaskType = TaskType.SubTask};
+            var task = new Vacancy { TaskType = TaskType.SubTask};
             _taskValidationService.Setup(x => x.ValidateTaskExistence(It.IsAny<int>())).ReturnsAsync(false);
 
             // Act
-            await _service.AddTask(task);
+            await _service.AddVacancy(task);
 
             // Assert
             _unitOfWork.Verify(x => x.Save(), Times.Never);
@@ -84,17 +84,17 @@ namespace UnitTests.Services
         {
             // Arrange
             var taskId = 1;
-            var subTasks = new List<Tasks>
+            var subTasks = new List<Vacancy>
             {
-                new Tasks { Id = 2, TaskType = TaskType.SubTask },
+                new Vacancy { Id = 2, TaskType = TaskType.SubTask },
             };
-            var task = new Tasks { Id = taskId, TaskType = TaskType.Task };
+            var task = new Vacancy { Id = taskId, TaskType = TaskType.Task };
 
             //_unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(),It.IsAny<CancellationToken>()))
               //         .ReturnsAsync(subTasks);
 
             // Act
-            await _service.DeleteTask(task);
+            await _service.DeleteVacancy(task);
 
             // Assert
             foreach (var subTask in subTasks)
@@ -110,12 +110,12 @@ namespace UnitTests.Services
         public async Task DeleteTask_TaskHasNoSubTasks_NoTasksDeleted()
         {
             // Arrange
-            var task = new Tasks { Id = 1, TaskType = TaskType.Task };
+            var task = new Vacancy { Id = 1, TaskType = TaskType.Task };
             //_unitOfWork.Setup(x => x.TasksRepository.ListAsync(It.IsAny<SubTasksByBaseTaskIdSpec>(), It.IsAny<CancellationToken>()))
               //         .ReturnsAsync(new List<Tasks>());
 
             // Act
-            await _service.DeleteTask(task);
+            await _service.DeleteVacancy(task);
 
             // Assert
             _unitOfWork.Verify(x => x.TasksRepository.DeleteAsync(task, It.IsAny<CancellationToken>()));
@@ -127,10 +127,10 @@ namespace UnitTests.Services
         public async Task UpdateTask_TaskAdded()
         {
             // Arrange
-            var task = new Tasks();
+            var task = new Vacancy();
 
             // Act
-            await _service.UpdateTask(task);
+            await _service.UpdateVacancy(task);
 
             // Assert
             _unitOfWork.Verify(x => x.TasksRepository.UpdateAsync(task, It.IsAny<CancellationToken>()));
@@ -148,23 +148,23 @@ namespace UnitTests.Services
               //     .ReturnsAsync(task);
 
             // Act
-            var res = await _service.GetTaskById(userId, taskId);
+            var res = await _service.GetVacancyById(userId, taskId);
 
             // Assert
             Assert.AreEqual(taskId, res.Id);
 
         }
 
-        private IEnumerable<Tasks> GetTasks()
+        private IEnumerable<Vacancy> GetTasks()
         {
-            return new List<Tasks>
+            return new List<Vacancy>
             {
-                new Tasks { Id = 1, UserId = "testUserId",TaskType = TaskType.Task,Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 2, UserId = "wrongUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work},
-                new Tasks { Id = 4, UserId = "testUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
-                new Tasks { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
-                new Tasks { Id = 6, UserId = "wrongUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Work},
+                new Vacancy { Id = 1, UserId = "testUserId",TaskType = TaskType.Task,Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Sales},
+                new Vacancy { Id = 2, UserId = "wrongUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Sales},
+                new Vacancy { Id = 3, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Sales},
+                new Vacancy { Id = 4, UserId = "testUserId", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Sales},
+                new Vacancy { Id = 5, UserId = "testUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Sales},
+                new Vacancy { Id = 6, UserId = "wrongUserId", TaskType = TaskType.SubTask, Status = Domain.Entities.TaskStatus.Rejected, Category = TaskCategory.Sales},
             };
         }
     }

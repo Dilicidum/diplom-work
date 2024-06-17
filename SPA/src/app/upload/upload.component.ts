@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { PopupFormComponent } from '../popup-form/popup-form.component';
 import { AssesmentResponse } from '../models/assesmentResponse';
 import { ActivatedRoute } from '@angular/router';
+import { Criteria } from '../models/criteria';
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -136,7 +137,7 @@ export class UploadComponent implements OnInit {
   showXAxisLabel = true;
   xAxisLabel_Q = 'Candidate Id';
   showYAxisLabel = true;
-  yAxisLabel_Q = 'Коефіцієнт Компромісного рішення(Q)';
+  yAxisLabel_Q = 'Candidates scores';
   xAxisLabel_S = 'Candidate Id';
   yAxisLabel_S = 'Коефіцієнт загального задоволення (S)';
   yAxisLabel_R = 'Коефіцієнт максимальної відстані (R)';
@@ -181,18 +182,36 @@ export class UploadComponent implements OnInit {
     return this.uploadForm.get('criterias') as FormArray;
   }
 
-  private defaultCriterias = [
-    0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17,
-  ];
+  private defaultWeights = [0.16, 0.07, 0.02, 0.2, 0.16, 0.1, 0.05, 0.07, 0.17];
+  private defaultCriterias = ['', '', '', '', '', '', '', '', ''];
+  criteriasForVacancy: Criteria[] = [];
 
   addCriterias() {
-    this.defaultCriterias.forEach((criteriaValue) => {
-      this.criterias.push(
-        this.fb.group({
-          value: [criteriaValue, Validators.required],
-        })
-      );
-    });
+    this.httpClient
+      .get<Criteria[]>('http://localhost:5292/api/criterias/' + this.vacancyId)
+      .subscribe((data) => {
+        this.criteriasForVacancy = data;
+        console.log('criterias = ', data);
+        let i = 0;
+        this.defaultWeights = this.criteriasForVacancy.map((criteria) => {
+          return criteria.vacancyWeight;
+        });
+        this.defaultCriterias = this.criteriasForVacancy.map((criteria) => {
+          return criteria.name;
+        });
+        console.log('this.defaultCriterias = ', this.defaultCriterias);
+        console.log('this.defaultWeights = ', this.defaultWeights);
+        this.defaultCriterias.forEach((criteriaValue) => {
+          this.criterias.push(
+            this.formBuilder.group({
+              name: [criteriaValue, Validators.required],
+              vacancyWeight: [this.defaultWeights[i], Validators.required],
+            })
+          );
+          i++;
+        });
+      });
+    let i = 0;
   }
 
   ngOnInit() {}
@@ -221,7 +240,8 @@ export class UploadComponent implements OnInit {
     formData.append('method', this.uploadForm.get('methodName')?.value);
     let criterias = [] as any;
     criterias = this.uploadForm.get('criterias')?.value;
-    criterias = criterias.map((criteria: any) => criteria.value);
+    console.log('cri');
+    criterias = criterias.map((criteria: any) => criteria.vacancyWeight);
     console.log('criterias = ', criterias);
     let criteriasString = JSON.stringify(criterias);
     console.log('criteriasString = ', criteriasString.toString());
@@ -377,7 +397,11 @@ export class UploadComponent implements OnInit {
     const dialogRef = this.dialog.open(PopupFormComponent, {
       width: '250px',
 
-      data: { bestAlternatives: this.bestAlternatives, amountOfCandidates: 15 }, // You can pass data to the dialog here
+      data: {
+        vacancyId: this.vacancyId,
+        bestAlternatives: this.bestAlternatives,
+        amountOfCandidates: 15,
+      }, // You can pass data to the dialog here
     });
 
     dialogRef.afterClosed().subscribe((result) => {

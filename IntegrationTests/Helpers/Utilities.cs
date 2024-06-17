@@ -52,15 +52,15 @@ namespace IntegrationTests.Helpers
             };
         }
 
-        public static List<Tasks> GetTasks()
+        public static List<Vacancy> GetTasks()
         {
-            return new List<Tasks>()
+            return new List<Vacancy>()
             {
-                new Tasks { Id = 1,DueDate = DateTime.Today, UserId = testUserId, Name = "1", Description = "3", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.None, Category = TaskCategory.Fitness },
-                new Tasks { Id = 2,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "2", Description = "3", TaskType = TaskType.SubTask},
-                new Tasks { Id = 3,DueDate = DateTime.Today, UserId = wrongUserId, Name = testUserId, Description = "3", TaskType = TaskType.Task },
-                new Tasks { Id = 4,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "4", Description = "4", TaskType = TaskType.Task,  Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Work },
-                new Tasks { Id = 5,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "5", Description = "5", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Progress, Category = TaskCategory.Fitness },
+                new Vacancy { Id = 1,DueDate = DateTime.Today, UserId = testUserId, Name = "1", Description = "3", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.None, Category = TaskCategory.Development },
+                new Vacancy { Id = 2,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "2", Description = "3", TaskType = TaskType.SubTask},
+                new Vacancy { Id = 3,DueDate = DateTime.Today, UserId = wrongUserId, Name = testUserId, Description = "3", TaskType = TaskType.Task },
+                new Vacancy { Id = 4,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "4", Description = "4", TaskType = TaskType.Task,  Status = Domain.Entities.TaskStatus.Done, Category = TaskCategory.Development },
+                new Vacancy { Id = 5,DueDate = DateTime.Today.AddDays(1), UserId = testUserId, Name = "5", Description = "5", TaskType = TaskType.Task, Status = Domain.Entities.TaskStatus.Progress, Category = TaskCategory.Finances },
             };
         }
     }

@@ -396,7 +396,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Candidate", "Candidate")
                         .WithMany("CandidateCriterias")
                         .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Criteria", "Criteria")
@@ -414,7 +414,8 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Tasks", "Vacancy")
                         .WithMany("Criterias")
-                        .HasForeignKey("VacancyId");
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Vacancy");
                 });

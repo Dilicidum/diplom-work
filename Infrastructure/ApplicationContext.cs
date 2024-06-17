@@ -12,7 +12,7 @@ namespace Infrastructure
 {
     public class ApplicationContext: IdentityDbContext<IdentityUser,IdentityRole,string>
     {
-        public DbSet<Tasks> Tasks { get; set; }
+        public DbSet<Vacancy> Tasks { get; set; }
 
         public DbSet<Criteria> Criterias { get; set; }
 
@@ -27,17 +27,18 @@ namespace Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder) { 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Tasks>().ToTable("Vacancies");
+            modelBuilder.Entity<Vacancy>().ToTable("Vacancies");
 
-             modelBuilder.Entity<Tasks>()
+             modelBuilder.Entity<Vacancy>()
             .HasOne(p => p.User)
             .WithMany()
             .HasForeignKey(p => p.UserId); 
 
-            modelBuilder.Entity<Tasks>()
-                .HasMany(x=>x.Criterias)
-                .WithOne(x=>x.Vacancy)
-                .HasForeignKey(x=>x.VacancyId);
+            modelBuilder.Entity<Vacancy>()
+    .HasMany(x => x.Criterias)
+    .WithOne(x => x.Vacancy)
+    .HasForeignKey(x => x.VacancyId)
+    .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Analysis>()
                 .HasOne(x=>x.Vacancy)
@@ -56,7 +57,7 @@ namespace Infrastructure
             //    .WithOne(x=>x.Vacancy)
             //    .HasForeignKey(x=>x.VacancyId);
 
-            modelBuilder.Entity<Tasks>()
+            modelBuilder.Entity<Vacancy>()
                 .HasMany(x=>x.Candidates)
                 .WithOne(x=>x.Vacancy)
                 .HasForeignKey(x=>x.VacancyId);
@@ -64,11 +65,7 @@ namespace Infrastructure
             modelBuilder.Entity<CandidateCriteria>()
         .HasKey(cc => new { cc.CandidateId, cc.CriteriaId });
 
-    modelBuilder.Entity<CandidateCriteria>()
-        .HasOne(cc => cc.Candidate)
-        .WithMany(c => c.CandidateCriterias)
-        .HasForeignKey(cc => cc.CandidateId)
-        .OnDelete(DeleteBehavior.Restrict); // Restricting delete behavior
+    
 
     modelBuilder.Entity<CandidateCriteria>()
         .HasOne(cc => cc.Criteria)

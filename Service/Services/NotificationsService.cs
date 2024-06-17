@@ -22,7 +22,7 @@ namespace Services.Services
 
         public async Task<IEnumerable<Notification>> GetNotifications(string userId)
         {
-            var spec = new TasksByUserIdAndDateSpec(userId,DateTime.Today);
+            var spec = new VacancyByUserIdAndDateSpec(userId,DateTime.Today);
             var tasks = await _unitOfWork.TasksRepository.ListAsync(spec);
             
             var notifications = _mapper.Map<Notification[]>(tasks);

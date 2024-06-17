@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions.DTO;
 using Services.Abstractions.Interfaces;
@@ -32,6 +33,14 @@ namespace API.Controllers
         {
             await _candidatesService.DeleteCandidate(candidateId);
 
+            return Ok();
+        }
+
+        [HttpPut("{candidateId}")]
+        public async Task<IActionResult> UpdateCandidate(int candidateId,CandidateDTO candidateDTO)
+        {
+            var candidate = _mapper.Map<Candidate>(candidateDTO);
+            await _candidatesService.UpdateCandidate(candidateId,candidate);
             return Ok();
         }
     }

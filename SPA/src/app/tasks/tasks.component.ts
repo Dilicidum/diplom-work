@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./tasks.component.css'],
 })
 export class TasksComponent implements OnInit {
+  userRole = localStorage.getItem('role');
   constructor(
     private taskService: TasksService,
     private route: ActivatedRoute
@@ -24,6 +25,7 @@ export class TasksComponent implements OnInit {
 
   StatusSort: any;
   CategorySort: any;
+  NameSort: any;
   TaskStatus = TaskStatusSort;
   TaskCategory = TaskCategorySort;
   taskStatuses: string[];
@@ -64,6 +66,17 @@ export class TasksComponent implements OnInit {
       this.taskType,
       this.StatusSort,
       this.CategorySort
+    );
+  }
+
+  NameSortChange(value: any) {
+    this.NameSort = value;
+    this.tasks$ = this.taskService.getTasks(
+      this.userId,
+      this.taskType,
+      this.StatusSort,
+      this.CategorySort,
+      this.NameSort
     );
   }
 

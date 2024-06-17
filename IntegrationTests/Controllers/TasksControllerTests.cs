@@ -51,7 +51,7 @@ namespace IntegrationTests.Controllers
                 UserId = userId,
                 BaseTaskId = null,
                 Status = Domain.Entities.TaskStatus.Done,
-                Category = Domain.Entities.TaskCategory.University,
+                Category = Domain.Entities.TaskCategory.Development,
                 Description = "description",
                 Name = "task name",
                 DueDate = new DateTime(),
@@ -66,7 +66,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTask = JsonSerializer.Deserialize<Tasks>(result, _jsonSerializerOptions);
+            var resultTask = JsonSerializer.Deserialize<Vacancy>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             Assert.IsNotNull(resultTask);
@@ -92,7 +92,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTask = JsonSerializer.Deserialize<Tasks>(result, _jsonSerializerOptions);
+            var resultTask = JsonSerializer.Deserialize<Vacancy>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -123,7 +123,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTasks = JsonSerializer.Deserialize<List<Tasks>>(result, _jsonSerializerOptions);
+            var resultTasks = JsonSerializer.Deserialize<List<Vacancy>>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(3, resultTasks?.Count());
@@ -138,7 +138,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTasks = JsonSerializer.Deserialize<List<Tasks>>(result, _jsonSerializerOptions);
+            var resultTasks = JsonSerializer.Deserialize<List<Vacancy>>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(1, resultTasks?.Count());
@@ -153,7 +153,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTasks = JsonSerializer.Deserialize<List<Tasks>>(result, _jsonSerializerOptions);
+            var resultTasks = JsonSerializer.Deserialize<List<Vacancy>>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(1, resultTasks?.Count());
@@ -168,7 +168,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTasks = JsonSerializer.Deserialize<List<Tasks>>(result, _jsonSerializerOptions);
+            var resultTasks = JsonSerializer.Deserialize<List<Vacancy>>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(2, resultTasks?.Count());
@@ -195,7 +195,7 @@ namespace IntegrationTests.Controllers
 
             // Assert
             var result = await response.Content.ReadAsStringAsync();
-            var resultTask = JsonSerializer.Deserialize<Tasks>(result, _jsonSerializerOptions);
+            var resultTask = JsonSerializer.Deserialize<Vacancy>(result, _jsonSerializerOptions);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             Assert.AreEqual(taskId, resultTask?.Id);
@@ -334,7 +334,7 @@ namespace IntegrationTests.Controllers
                 UserId = Utilities.testUserId,
                 BaseTaskId = null,
                 Status = Domain.Entities.TaskStatus.Done,
-                Category = Domain.Entities.TaskCategory.University,
+                Category = Domain.Entities.TaskCategory.Sales,
                 Description = "description",
                 Name = "task name",
                 DueDate = new DateTime(),

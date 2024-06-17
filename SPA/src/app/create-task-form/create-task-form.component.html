@@ -11,13 +11,6 @@
           <label for="description">Description</label>
           <input type="text" id="description" formControlName="description" class="form-control" placeholder="Enter description">
         </div>
-
-        <div class="p-2 form-group">
-          <label for="type">Type</label>
-          <select id="type" formControlName="type" class="form-control">
-            <option>{{TaskType}}</option>
-          </select>
-        </div>
       </div>
 
       <div>
@@ -35,10 +28,11 @@
           </select>
         </div>
 
-        <div class="p-2 form-group">
-          <label for="date">due date</label>
-          <input type="date" id="date" formControlName="dueDate" class="form-control" placeholder="Fill due date for task">
-        </div>
+
+      </div>
+      <div class="p-2 form-group">
+        <label for="date">due date</label>
+        <input type="date" id="date" formControlName="dueDate" class="form-control" placeholder="Fill due date for task">
       </div>
     </div>
     <div class="p-2 form-group" >
@@ -46,10 +40,10 @@
       <input type="number" id="amountOfCriterias" class="form-control" placeholder="Fill number of criterias"  formControlName="amountOfCriterias">
     </div>
     <div class="p-2 form-group" formArrayName="criterias">
-      <div *ngFor="let criterion of criterias.controls; let i = index" [formGroupName]="i" class="d-flex flex-row">
+      <div *ngFor="let criterion of criterias.controls; let i = index;" [formGroupName]="i" class="d-flex flex-row">
         <div class="p-2">
           <label>Criteria name {{i+1}}</label>
-          <input type="text" class="form-control" formControlName="name">
+          <input type="text" class="form-control" formControlName="name" placeholder="{{displayedHints[i]}}">
         </div>
         <div class="p-2">
           <label>Criteria weight {{i+1}}</label>

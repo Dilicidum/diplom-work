@@ -11,6 +11,8 @@ namespace Services.Abstractions.Interfaces
     {
         public Task CreateCandidate(int vacancyId, Candidate candidate);
 
+        public Task UpdateCandidate(int vacancyId, Candidate candidate);
+
         public Task<IEnumerable<Candidate>> GetCandidatesForVacancy(int vacancyId);
 
         public Task DeleteCandidate(int candidateId);

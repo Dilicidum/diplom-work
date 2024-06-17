@@ -14,7 +14,8 @@ export class TasksService {
     userId: string,
     taskType: string,
     status: string = '',
-    taskCategory: string = ''
+    taskCategory: string = '',
+    taskName: string = '5'
   ): Observable<Tasks[]> {
     return this.http.get<Tasks[]>(
       `http://localhost:5292/Users/${userId}/Tasks` +
@@ -23,7 +24,9 @@ export class TasksService {
         '&Status=' +
         status +
         '&Category=' +
-        taskCategory
+        taskCategory +
+        '&Name=' +
+        taskName
     );
   }
 
@@ -41,6 +44,7 @@ export class TasksService {
   }
 
   updateTask(task: Tasks): Observable<any> {
+    console.log('task = ', task);
     return this.http.put(
       `http://localhost:5292/Users/${task.userId}/Tasks/` + task.id,
       task

@@ -10,10 +10,12 @@ namespace Domain.Interfaces
     {
         public Task Save();
 
-        public ITasksRepository TasksRepository { get; }
+        public IVacancyRepository TasksRepository { get; }
 
         public ICriteriasRepository CriteriasRepository { get; }
 
         public ICandidatesRepository CandidatesRepository { get; }
+
+        public IAnalysisRepository AnalysisRepository { get; }
     }
 }

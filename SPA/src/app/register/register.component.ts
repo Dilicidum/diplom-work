@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
     if (this.registrationForm.invalid) {
       console.log('Invalid form');
     }
-
+    console.log('registration forn = ', this.registrationForm.value);
     let model = {
       email: this.registrationForm.value.email,
       username: this.registrationForm.value.username,

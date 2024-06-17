@@ -36,13 +36,15 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 builder.Services.AddScoped<IJWTManager,JWTManager>();
-builder.Services.AddScoped<ITasksService,TasksService>();
+builder.Services.AddScoped<IVacanciesService,VacanciesService>();
 builder.Services.AddScoped<INotificationsService,NotificationsService>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-builder.Services.AddScoped<ITasksRepository,TasksRepository>();
+builder.Services.AddScoped<IVacancyRepository,VacancyRepository>();
 builder.Services.AddScoped<ITaskValidationService,TaskValidationService>();
 builder.Services.AddScoped<IVikorService,VikorService>();
 builder.Services.AddScoped<ICriteriasRepository,CriteriasRepository>();
+builder.Services.AddScoped<IAnalysisService,AnalysisService>();
+builder.Services.AddScoped<IAnalysisRepository,AnalysisRepository>();
 builder.Services.AddScoped<ICriteriasService,CriteriasService>();
 builder.Services.AddScoped<ICandidatesService,CandidatesService>();
 builder.Services.AddScoped<ICandidatesRepository,CandidatesRepository>();

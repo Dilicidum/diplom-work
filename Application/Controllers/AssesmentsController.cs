@@ -12,6 +12,7 @@ using Services.Abstractions.DTO;
 using System.Net.Http.Json;
 using Services.Abstractions.Interfaces;
 using System;
+using AutoMapper;
 namespace API.Controllers
 {
     [ApiController]
@@ -20,13 +21,16 @@ namespace API.Controllers
     {
         private readonly IVikorService _vikorService;
         private readonly ICandidatesService _candidatesService;
+        private readonly IAnalysisService _analysisService;
+        private IMapper _mapper;
         
         //private readonly ITopsisService _topsisService;
-        public AssesmentsController(IVikorService vikorService, ICandidatesService candidatesService)
+        public AssesmentsController(IVikorService vikorService, ICandidatesService candidatesService, IAnalysisService analysisService,IMapper mapper)
         {
             _vikorService = vikorService;
             _candidatesService = candidatesService;
-            
+            _analysisService = analysisService;
+            _mapper = mapper;
             //_topsisService = topsisService;
         }
 
@@ -36,7 +40,7 @@ namespace API.Controllers
             var criteriasArray = JsonConvert.DeserializeObject<double[]>(model.Criterias);
 
             var array = await _candidatesService.GetCriteriasForCandidatesForVacancy(vacancyId);
-            //model.File = null;
+            model.File = null;
             if(model.File != null)
             {
                 array = await ParseFile(model.File);
@@ -99,5 +103,19 @@ namespace API.Controllers
         //{ 
 
         //}
+
+        [HttpPost("Analysis/{vacancyId}")]
+        public async Task<IActionResult> CreateAnalysis(int vacancyId,List<int> analysisesDTO)
+        {
+            await _analysisService.RecordAnalysis(vacancyId,analysisesDTO);
+            return Ok();
+        }
+
+        [HttpGet("Analysis/{vacancyId}")]
+        public async Task<IActionResult> GetAnalysisResult(int vacancyId)
+        {
+            var result = await _analysisService.GetAnalysisForVacancy(vacancyId);
+            return Ok(result);
+        }
     }
 }

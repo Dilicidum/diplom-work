@@ -13,5 +13,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<CriteriaDto>> GetAll();
 
         Task<IEnumerable<CriteriaDto>> GetByCriteriasByVacancyId(int vacancyId);
+
+        Task AddCriterias(List<Criteria> criterias);
     }
 }

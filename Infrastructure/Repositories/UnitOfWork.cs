@@ -10,18 +10,27 @@ namespace Infrastructure.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext _context;
-        private readonly ITasksRepository _taskRepository;
+        private readonly IVacancyRepository _taskRepository;
         private readonly ICriteriasRepository _criteriaRepository;
         private readonly ICandidatesRepository _candidatesRepository;
-        public UnitOfWork(ApplicationContext context, ITasksRepository taskRepository, ICriteriasRepository criteriaRepository, ICandidatesRepository candidatesRepository)
+        private readonly IAnalysisRepository _analysisRepository;
+        public UnitOfWork(ApplicationContext context, IVacancyRepository taskRepository, ICriteriasRepository criteriaRepository, ICandidatesRepository candidatesRepository,IAnalysisRepository analysisRepository)
         {
             _context = context;
             _taskRepository = taskRepository;
             _criteriaRepository = criteriaRepository;
             _candidatesRepository = candidatesRepository;
+            _analysisRepository = analysisRepository;
         }
 
-        public ITasksRepository TasksRepository { 
+        public IAnalysisRepository AnalysisRepository { 
+                get
+                {
+                    return _analysisRepository;
+                } 
+            }
+
+        public IVacancyRepository TasksRepository { 
                 get
                 {
                     return _taskRepository;

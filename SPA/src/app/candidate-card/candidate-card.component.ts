@@ -62,11 +62,14 @@ export class CandidateCardComponent implements OnChanges {
   }
 
   onSubmit() {
+    console.log(this.taskForm.get('name').value);
     this.task.name = this.taskForm.get('name').value;
-    console.log(this.taskForm.get('description').value);
     this.task.email = this.taskForm.get('email').value;
     this.task.phone = this.taskForm.get('phone').value;
 
+    this.http
+      .put('http://localhost:5292/api/Candidates/' + this.task.id, this.task)
+      .subscribe((data) => {});
     this.taskForm.disable();
   }
 

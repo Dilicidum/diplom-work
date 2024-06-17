@@ -355,7 +355,16 @@ namespace Application.Services
 
         for (int i = 0; i < sMedium.Count; i++)
         {
-            qProxyStar[i] = Math.Round((v * (sMedium[i] - sStar) / (sMin - sStar) + (1 - v) * (rMax[i] - rStar) / (rMin - rStar)), 4);
+            var number = Math.Round((v * (sMedium[i] - sStar) / (sMin - sStar) + (1 - v) * (rMax[i] - rStar) / (rMin - rStar)), 4);
+                if(number == 0)
+                {
+                    number = sMin + rMin;
+                }
+                if(number == 1)
+                {
+                    number = Math.Abs(rStar - sStar);
+                }
+            qProxyStar[i] = number;
             Console.WriteLine($"Q{i + 1} = {qProxyStar[i]}");
         }
 

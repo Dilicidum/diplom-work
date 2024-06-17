@@ -15,7 +15,7 @@
     <div class="p-2 form-group">
       <label for="role">Role</label>
       <select type="select" id="role" class="form-control" formControlName="role" placeholder="Fill your role">
-        <option *ngFor="let option of roles">{{option}}</option>
+        <option *ngFor="let option of roles" [value]="option">{{option}}</option>
       </select>
     </div>
 

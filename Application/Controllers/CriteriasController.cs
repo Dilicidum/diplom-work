@@ -34,7 +34,7 @@ namespace API.Controllers
             return Ok(res);
         }
 
-        [HttpPost("{vacancyId}")]
+        [HttpPost("Candidates/{vacancyId}")]
         public async Task<IActionResult> CreateCandidate(int vacancyId,CandidateDTO candidate)
         {
             var model = _mapper.Map<Candidate>(candidate);
@@ -43,6 +43,19 @@ namespace API.Controllers
             await _candidatesService.CreateCandidate(vacancyId, model);
             var res = await _criteriasService.GetByCriteriasByVacancyId(vacancyId);
             return Ok(res);
+        }
+
+        [HttpPost("{vacancyId}")]
+        public async Task<IActionResult> CreateCriterias(int vacancyId, List<CriteriaDto> criterias)
+        {
+            var models = _mapper.Map<List<Criteria>>(criterias);
+            foreach(var model in models)
+            {
+                model.VacancyId = vacancyId;
+            }
+
+            await _criteriasService.AddCriterias(models);
+            return Ok();
         }
     }
 }

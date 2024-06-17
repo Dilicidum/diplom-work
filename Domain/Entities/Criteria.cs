@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public string Name { get; set; }
 
-        public Tasks? Vacancy { get; set; }
+        public Vacancy? Vacancy { get; set; }
 
         public int? VacancyId { get; set; }
 

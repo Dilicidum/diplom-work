@@ -10,11 +10,12 @@ namespace Services.Abstractions.DTO
         public MapperProfile() { 
             CreateMap<UserRegistrationModel,IdentityUser>().ReverseMap();  
             CreateMap<UserLoginModel,IdentityUser>().ReverseMap();  
-            CreateMap<TaskInputModel,Tasks>().ReverseMap();
+            CreateMap<TaskInputModel,Vacancy>().ReverseMap();
             CreateMap<CriteriaDto,Criteria>().ReverseMap();
             CreateMap<CandidateDTO,Candidate>().ReverseMap();
             CreateMap<CandidateCriteriaDTO,CandidateCriteria>().ReverseMap();
-            CreateMap<Tasks,Notification>()
+            CreateMap<AnalysisDTO,Analysis>().ReverseMap();
+            CreateMap<Vacancy,Notification>()
                 .ForMember(dest => dest.TaskId,act=>act.MapFrom(x=>x.Id))
                 .ForMember(dest => dest.Title,act=>act.MapFrom(x=>x.Name))
                 .ForMember(dest => dest.UserId,act=>act.MapFrom(x=>x.UserId));

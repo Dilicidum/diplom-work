@@ -31,6 +31,9 @@ namespace API.Controllers
         {   
             var user = _mapper.Map<IdentityUser>(model);
             var res = await _userManager.CreateAsync(user, model.Password);
+            var role1 = new IdentityRole("Technical specialist");
+            var role2 = new IdentityRole("Recruiter");
+            var role3 = new IdentityRole("Manager");
 
             if(!res.Succeeded)
             {
@@ -67,8 +70,8 @@ namespace API.Controllers
             }
             
             var token = await _jwtManager.GenerateToken(signedUser);
-
-            return Ok(new { token = token,userId = signedUser.Id});
+            var role = (await _userManager.GetRolesAsync(signedUser)).FirstOrDefault();
+            return Ok(new { token = token,userId = signedUser.Id, role = role});
         }
 
         [HttpPost("LogOut")]

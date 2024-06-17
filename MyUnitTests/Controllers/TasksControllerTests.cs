@@ -26,15 +26,15 @@ namespace UnitTests.Controllers
     [TestFixture]
     public class TasksControllerTests
     {
-        private Mock<ITasksService> _taskService;
+        private Mock<IVacanciesService> _taskService;
         private Mock<IMapper> _mapper;
         private Mock<UserManager<IdentityUser>> _userManager;
-        private TasksController _controller;
+        private VacanciesController _controller;
 
         [SetUp]
         public void Setup()
         {
-            _taskService = new Mock<ITasksService>();
+            _taskService = new Mock<IVacanciesService>();
             _mapper = new Mock<IMapper>();
             _userManager = new Mock<UserManager<IdentityUser>>(
                 new Mock<IUserStore<IdentityUser>>().Object,
@@ -47,7 +47,7 @@ namespace UnitTests.Controllers
                 new Mock<IServiceProvider>().Object,
                 new Mock<ILogger<UserManager<IdentityUser>>>().Object);
 
-            _controller = new TasksController(_taskService.Object, _mapper.Object, _userManager.Object);
+            _controller = new VacanciesController(_taskService.Object, _mapper.Object, _userManager.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {
                 new Claim(ClaimTypes.NameIdentifier, "testUserId"),
             }));
@@ -64,7 +64,7 @@ namespace UnitTests.Controllers
             var inputTask = new TaskInputModel(){
                 TaskType = Domain.Entities.TaskType.Task,
                 BaseTaskId = null,
-                Category = Domain.Entities.TaskCategory.Work,
+                Category = Domain.Entities.TaskCategory.Sales,
                 Status = Domain.Entities.TaskStatus.None,
                 Name = "TaskName",
                 Description = "TaskDescription",
@@ -72,9 +72,9 @@ namespace UnitTests.Controllers
                 UserId = userId
             };
 
-            var task = new Tasks(){
+            var task = new Vacancy(){
                 TaskType = TaskType.Task,
-                Category = TaskCategory.Work,
+                Category = TaskCategory.Sales,
                 Status = Domain.Entities.TaskStatus.None,
                 Name = "TaskName",
                 Description = "TaskDescription",
@@ -82,7 +82,7 @@ namespace UnitTests.Controllers
                 UserId = userId
             };
 
-            _mapper.Setup(m => m.Map<Tasks>(It.IsAny<TaskInputModel>())).Returns(task);
+            _mapper.Setup(m => m.Map<Vacancy>(It.IsAny<TaskInputModel>())).Returns(task);
 
             // Act
             
@@ -91,7 +91,7 @@ namespace UnitTests.Controllers
             // Assert
             Assert.IsInstanceOf<CreatedAtActionResult>(res);
             var createdAtResult = res as CreatedAtActionResult;
-            Assert.AreEqual(nameof(TasksController.GetTaskById), createdAtResult.ActionName);
+            Assert.AreEqual(nameof(VacanciesController.GetVacancyById), createdAtResult.ActionName);
             Assert.AreEqual(task, createdAtResult.Value);
         }
 
@@ -114,12 +114,12 @@ namespace UnitTests.Controllers
         public async Task GetTasksWithFilter_UserHasAccess_ReturnsOk(string userId)
         {
             // Arrange
-            var taskList = new List<Tasks>();
-            _taskService.Setup(x => x.GetTasksForUser(It.IsAny<TasksByTypeAndStatusAndCategorySpecAndUserId>()))
+            var taskList = new List<Vacancy>();
+            _taskService.Setup(x => x.GetVacanciesForUser(It.IsAny<VacancyByTypeAndStatusAndCategorySpecAndUserId>()))
                 .ReturnsAsync(taskList);
 
             // Act
-            var result = await _controller.GetTasksWithFilter(userId, Domain.Entities.TaskType.Task, Domain.Entities.TaskStatus.Done, Domain.Entities.TaskCategory.Fitness);
+            var result = await _controller.GetTasksWithFilter(userId, Domain.Entities.TaskType.Task, Domain.Entities.TaskStatus.Done, Domain.Entities.TaskCategory.Development);
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
@@ -147,7 +147,7 @@ namespace UnitTests.Controllers
             int taskId = 1;
 
             // Act
-            var res = await _controller.GetTaskById(userId, taskId);
+            var res = await _controller.GetVacancyById(userId, taskId);
 
             // Assert
             Assert.IsInstanceOf<ForbidResult>(res);
@@ -159,10 +159,10 @@ namespace UnitTests.Controllers
         {
             // Arrange
             int taskId = 1;
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync((Tasks)null);
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync((Vacancy)null);
 
             // Act
-            var res = await _controller.GetTaskById(userId, taskId);
+            var res = await _controller.GetVacancyById(userId, taskId);
 
             // Assert
             Assert.IsInstanceOf<NotFoundResult>(res);
@@ -174,11 +174,11 @@ namespace UnitTests.Controllers
         {
             // Arrange
             int taskId = 1;
-            var task = new Tasks();
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync(task);
+            var task = new Vacancy();
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync(task);
 
             // Act
-            var res = await _controller.GetTaskById(userId, taskId);
+            var res = await _controller.GetVacancyById(userId, taskId);
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(res);
@@ -196,7 +196,7 @@ namespace UnitTests.Controllers
             var model = new TaskInputModel();
 
             // Act
-            var res = await _controller.UpdateTask(userId, taskId, model);
+            var res = await _controller.UpdateVacancy(userId, taskId, model);
 
             // Assert
             Assert.IsInstanceOf<ForbidResult>(res);
@@ -209,10 +209,10 @@ namespace UnitTests.Controllers
             // Arrange
             int taskId = 1;
             var model = new TaskInputModel();
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync((Tasks)null);
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync((Vacancy)null);
 
             // Act
-            var res = await _controller.UpdateTask(userId, taskId, model);
+            var res = await _controller.UpdateVacancy(userId, taskId, model);
 
             // Assert
             Assert.IsInstanceOf<NotFoundResult>(res);
@@ -225,11 +225,11 @@ namespace UnitTests.Controllers
             // Arrange
             int taskId = 1;
             var model = new TaskInputModel();
-            var task = new Tasks();
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync(task);
+            var task = new Vacancy();
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync(task);
 
             // Act
-            var res = await _controller.UpdateTask(userId, taskId, model);
+            var res = await _controller.UpdateVacancy(userId, taskId, model);
 
             // Assert
             Assert.IsInstanceOf<NoContentResult>(res);
@@ -241,7 +241,7 @@ namespace UnitTests.Controllers
         {
             // Arrange
             int taskId = 1;
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync((Tasks)null);
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync((Vacancy)null);
 
             // Act
             var res = await _controller.Delete(userId, taskId);
@@ -256,8 +256,8 @@ namespace UnitTests.Controllers
         {
             // Arrange
             int taskId = 1;
-            var task = new Tasks();
-            _taskService.Setup(x => x.GetTaskById(userId, taskId)).ReturnsAsync(task);
+            var task = new Vacancy();
+            _taskService.Setup(x => x.GetVacancyById(userId, taskId)).ReturnsAsync(task);
 
             // Act
             var res = await _controller.Delete(userId, taskId);
